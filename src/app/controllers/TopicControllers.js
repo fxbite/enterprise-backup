@@ -1,3 +1,4 @@
+const res = require('express/lib/response')
 const Topic = require('../models/Topic')
 
 class TopicController {
@@ -15,19 +16,23 @@ class TopicController {
         }
     }
 
-    // [PUT] /topic/:id
+    // [PUT] /topic/update/:id
     async updateTopic(req, res, next){
         
         try {
-            
-            const topic = await Topic.findById(req.params.id)
+            const id = req.params.id
+            const topic = await Topic.findById(id)
 
             if (topic.managerId === req.body.managerId){
                 await topic.updateOne({$set: req.body})
-                res.status(200).json("The topic has been updated.")
+                const topicUpdated = await Topic.findById(id)
+                res.status(200).json({
+                    message: "The topic has been updated.",
+                    topic: topicUpdated
+                })
 
             } else {
-                res.status(403).json("You can't update this topic.")
+                res.status(403).json({message: "You can't update this topic."})
             }
 
         } catch (error) {
@@ -35,20 +40,45 @@ class TopicController {
         }
     }
 
-    // [DELETE] /topic/:id
-    async updateTopic(req, res, next){
+    // [DELETE] /topic/delete/:id
+    async deleteTopic(req, res, next){
         
         try {
-            
             const topic = await Topic.findById(req.params.id)
 
             if (topic.managerId === req.body.managerId){
                 await topic.deleteOne()
-                res.status(200).json("The topic has been deleted.")
+                res.status(200).json({
+                    message:"The topic has been deleted."
+                })
 
             } else {
-                res.status(403).json("You can't delete this topic.")
+                res.status(403).json({message:"You can't delete this topic."})
             }
+
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    // [GET] /topic/all
+    async getAllTopic(req, res, next){
+
+        try {
+            const topic = await Topic.find({})
+            res.status(200).json(topic)
+
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    // [GET] /topic/one/:id
+    async getATopic(req, res, next) {
+
+        try {
+            const topic = await Topic.findById(req.params.id)
+            res.status(200).json(topic)
 
         } catch (error) {
             res.status(500).json(error)
