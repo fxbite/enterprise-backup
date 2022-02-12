@@ -23,7 +23,13 @@ class TopicController {
             const id = req.params.id
             const topic = await Topic.findById(id)
 
-            await topic.updateOne({$set: req.body})
+            await topic.updateOne({
+                $set: {
+                    title: req.body.title,
+                    contentIdea: req.body.contentIdea,
+                    expireTime: req.body.expireTime
+                }
+            })
             const topicUpdated = await Topic.findById(id)
             res.status(200).json({
                 message: "The topic has been updated.",
