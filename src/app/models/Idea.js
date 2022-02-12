@@ -11,7 +11,8 @@ const IdeaSchema = new mongoose.Schema({
     dislikes: {type: Array, default: []},
     comments: {type: Array, default: []},
     anonymousMode: {type: Boolean, default: true},
-    department: {type: String, default: ""}
+    department: {type: String, default: ""},
+    totalClick: {type: String, default: ""}
 
 }, {timestamps: true}
 )
