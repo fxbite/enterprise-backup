@@ -6,10 +6,10 @@ router.get('/', (req, res, next) => {
     })
 })
 
-// router.get('/*', (req, res, next) => {
-//     res.json({
-//         message: 'Not found service (404)'
-//     })
-// })
+router.get('*', (req, res, next) => {
+    res.json({
+        message: 'Not found service (404)'
+    })
+})
 
 module.exports = router

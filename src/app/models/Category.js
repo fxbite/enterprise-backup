@@ -2,9 +2,7 @@ const mongoose = require('mongoose')
 
 const CategorySchema = new mongoose.Schema({
 
-    creatorId: {type: String, required: true},
-    name: {type: String, required: true},
-    tag: {type: String, maxLength: 6, default: "" },
+    name: {type: String, required: true}
 
 }, {timestamps: true}
 )

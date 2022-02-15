@@ -2,17 +2,14 @@ const mongoose = require('mongoose')
 
 const IdeaSchema = new mongoose.Schema({
 
-    topicId: {type: String, required: true},
-    authorId: {type: String, required: true},
-    mediaURL: {type: Array, default: []},
-    contentIdea: {type: String, required: true},
-    category: {type: Array, required: true, default: []},
-    likes: {type: Array, default: []},
-    dislikes: {type: Array, default: []},
-    comments: {type: Array, default: []},
-    anonymousMode: {type: Boolean, default: true},
-    department: {type: String, default: ""},
-    totalClick: {type: String, default: ""}
+    title: {type: String, required: true},
+    description: {type: String, required: true, default: ""},
+    content: {type: String, required: true},
+    anonymousMode: {type: Boolean, default: false},
+    user_id: {type: String, required: true},
+    submission_id: {type: String, required: true},
+    category_id: {type: String, required: true},
+    total_view: {type: String, default: ""}
 
 }, {timestamps: true}
 )

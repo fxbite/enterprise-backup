@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 
 const CommentSchema = new mongoose.Schema({
 
-    userId: {type: String, required: true},
-    ideaId: {type: String, required: true},
-    mediaURL: {type: Array, default: []},
-    content: {type: String, default: ""},
-    anonymousMode: {type: Boolean, default: true},
+    content: {type: String, required: true},
+    anonymousMode: {type: Boolean, default: false},
+    idea_id: {type: String, required: true},
+    user_id : {type: String, required: true},
+    comment_id: {type: String, required: true}
 
 }, {timestamps: true}
 )
