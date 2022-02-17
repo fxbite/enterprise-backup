@@ -6,7 +6,8 @@ const CommentSchema = new mongoose.Schema({
     anonymousMode: {type: Boolean, default: false},
     idea_id: {type: String, required: true},
     user_id : {type: String, required: true},
-    comment_id: {type: String, required: true}
+    comment_id: {type: String, default: ""},
+    replierMode: {type: Boolean, default: false}
 
 }, {timestamps: true}
 )

@@ -1,7 +1,7 @@
-
 const File = require('../models/File')
-
 class FileController {
+
+    
 
 }
 
