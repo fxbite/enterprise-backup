@@ -1,5 +1,6 @@
 
 const Submission = require('../models/Submission')
+const Folder = require('../models/Folder')
 
 class SubmissionController {
 
