@@ -2,7 +2,7 @@ const Comment = require('../models/Comment')
 
 class CommentController {
 
-    // [POST] /comment/create
+    // [POST] /comment
     async createComment(req, res, next){
 
         try {
@@ -15,7 +15,7 @@ class CommentController {
         }
     }
 
-    // [PUT] /comment/update/:id
+    // [PATCH] /comment/:id
     async updateComment(req, res, next){
 
         try {
@@ -40,7 +40,7 @@ class CommentController {
         }
     }
 
-    // [DELETE] /comment/delete/:id
+    // [DELETE] /comment/:id
     async deleteComment(req, res, next){
 
         try {
@@ -57,7 +57,7 @@ class CommentController {
         }
     }
 
-    // [GET] /comment/all
+    // [GET] /comments
     async showAllComment(req, res, next){
 
         try {
@@ -68,7 +68,7 @@ class CommentController {
         }
     }
 
-    // [GET] /comment/one/:id
+    // [GET] /comment/:id
     async showAComment(req, res, next){
 
         try {

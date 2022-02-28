@@ -9,7 +9,8 @@ const IdeaSchema = new mongoose.Schema({
     user_id: {type: String, required: true},
     submission_id: {type: String, required: true},
     category_id: {type: String, required: true},
-    total_view: {type: String, default: ""}
+    total_view: {type: String, default: ""},
+    total_reaction: {type: String, default: ""}
 
 }, {timestamps: true}
 )

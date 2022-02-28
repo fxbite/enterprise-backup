@@ -16,7 +16,7 @@ const fileController = require('../app/controllers/FileControllers')
 
 //* Idea
 router.post('/idea', ideaController.createIdea)          //? Create a idea
-router.put('/idea/:id', ideaController.updateIdea)       //? Update a idea
+router.patch('/idea/:id', ideaController.updateIdea)     //? Update a idea
 router.delete('/idea/:id', ideaController.deleteIdea)    //? Delete a idea & delete all views 
 router.get('/idea/:id', ideaController.getAIdea)         //? Get a idea
 router.get('/ideas', ideaController.getAllIdea)          //? Get all ideas by pagination
@@ -24,7 +24,7 @@ router.get('/ideas', ideaController.getAllIdea)          //? Get all ideas by pa
 
 //* Comment
 router.post('/comment', commentController.createComment)          //? Create a comment
-router.put('/comment/:id', commentController.updateComment)       //? Update a comment
+router.patch('/comment/:id', commentController.updateComment)     //? Update a comment
 router.delete('/comment/:id', commentController.deleteComment)    //? Delete a comment
 router.get('/comment/:id', commentController.showAComment)        //? Get a comment 
 router.get('/comments', commentController.showAllComment)         //? Get all latest comments (comments level1)
@@ -32,7 +32,7 @@ router.get('/comments', commentController.showAllComment)         //? Get all la
 
 //* Submission
 router.post('/submission', submissionController.createSubmission)        //? Create a topic
-router.put('/submission/:id', submissionController.updateSubmission)     //? Update a topic
+router.patch('/submission/:id', submissionController.updateSubmission)   //? Update a topic
 router.delete('/submission/:id', submissionController.deleteSubmission)  //? Delete a topic
 router.get('/submission/:id', submissionController.getASubmission)       //? Get a topic
 router.get('/submissions', submissionController.getAllSubmission)        //? Get all topics

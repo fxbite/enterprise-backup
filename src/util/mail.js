@@ -11,9 +11,10 @@ const oauth2Client = new google.auth.OAuth2(
 oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN})  
 
 
-async function notificationMail(fullname, email, option) {
+async function notificationMail(fullname, email, option, topic) {
 
     try {
+        const showTopic = topic || 'a'
         const accessToken = await oauth2Client.getAccessToken()
         const transport = nodemailer.createTransport({
             service: 'gmail',
@@ -41,14 +42,38 @@ async function notificationMail(fullname, email, option) {
             html: `<h3>Hi ${fullname}, we notice that you have a reply in your comment.</h3>`
         }
 
-        
-        if(option === 'idea'){
+        const mailCoordinator = {
+            from: 'CMS ENTERPRISE 🚀 <thinhltgcs190714@fpt.edu.vn>',
+            to: email,
+            subject: `A new idea has just been submitted in ${showTopic} topic - Check it now`,
+            html: `<h3>Hi ${fullname}, a new idea has been submitted.</h3>`
+        }
+
+        //? Do stuff
+        const handlerIdea = async()=> {
             const resultIdea = await transport.sendMail(mailIdea)
             return resultIdea
-        } else {
+        }
+        const handlerReply = async()=> {
             const resultReply = await transport.sendMail(mailReply)
             return resultReply
         }
+        const handlerCoordinator = async()=> {
+            const resultCoordinator = await transport.sendMail(mailCoordinator)
+            return resultCoordinator
+        }
+
+        //? Dispatcher
+        const handlers = {
+            idea: handlerIdea,
+            reply: handlerReply,
+            coordinator: handlerCoordinator
+        }
+
+        //? Handler
+        const handler = handlers[option]
+        if(!handler) throw Error('Option not recognized')
+        return handler()
 
     } catch (error) {
         return error
