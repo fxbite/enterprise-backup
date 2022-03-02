@@ -3,6 +3,7 @@ const Idea = require('../models/Idea')
 const View = require('../models/View')
 const React = require('../models/React')
 const User = require('../models/User')
+const Submission = require('../models/Submission')
 const paginatedResults = require('../../util/paginated')
 const notificationMail = require('../../util/mail')
 
@@ -20,9 +21,18 @@ class IdeaController {
             const roleId = req.params.id
             const user = await User.find({role_id: roleId })
             
+            // Get a topic
+            const submission = await Submission.findById(req.body.submission_id)
+            const nameTopic = submission[0].name
 
             // Send notification mail to coordinator
-            await notificationMail()
+            for (const element of user) {
+                const fullName = element.fullname
+                const email = element.email
+                const topic = nameTopic
+                await notificationMail(fullName, email, 'coordinator', topic)
+            }
+
             res.status(200).json(savedIdea)
 
         } catch (error) {

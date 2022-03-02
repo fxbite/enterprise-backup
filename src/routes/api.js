@@ -13,9 +13,10 @@ const departmentController = require('../app/controllers/DepartmentControllers')
 const viewController = require('../app/controllers/ViewControllers')
 const categoryController = require('../app/controllers/CategoryControllers')
 const fileController = require('../app/controllers/FileControllers')
+const userController = require('../app/controllers/UserControllers')
 
 //* Idea
-router.post('/idea', ideaController.createIdea)          //? Create a idea
+router.post('/idea/:id/role', ideaController.createIdea) //? Create a idea
 router.patch('/idea/:id', ideaController.updateIdea)     //? Update a idea
 router.delete('/idea/:id', ideaController.deleteIdea)    //? Delete a idea & delete all views 
 router.get('/idea/:id', ideaController.getAIdea)         //? Get a idea
@@ -47,6 +48,8 @@ router.post('/file/:id', upload.single('document'), fileController.createFile)  
 
 
 //* User
+router.post('/register', userController.registerUser)
+router.post('/login', userController.loginUser)
 
 
 //* Reaction
