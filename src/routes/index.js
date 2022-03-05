@@ -1,9 +1,9 @@
 const siteRouter = require('./site')
-const version1Router = require('./version1')
+const apiRouter = require('./api')
 
 function route(app) {
 
-    app.use('/v1', version1Router)
+    app.use('/v1', apiRouter)
 
     app.use('/', siteRouter)
 

@@ -2,7 +2,7 @@ const React = require('../models/React')
 
 class ReactionController {
 
-    // [POST] /react
+    // [POST] /reaction
     async createReact(req, res, next){
 
         try {
@@ -16,12 +16,14 @@ class ReactionController {
     }
 
 
-    // [GET] /react/:id
-    async getAllReact(req, res, next){
+    // [GET] /reaction/:id
+    async getAReact(req, res, next){
 
         try {
             const ideaId = req.params.id
-            const react = await React.find({})
+            const react = await React.find({
+                idea_id: ideaId
+            })
             res.status(200).json(react)
 
         } catch (error) {
