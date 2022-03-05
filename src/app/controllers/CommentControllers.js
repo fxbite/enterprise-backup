@@ -1,13 +1,42 @@
 const Comment = require('../models/Comment')
-
+const Idea = require('../models/Idea')
+const User = require('../models/User')
+const notificationMail = require('../../util/mail')
 class CommentController {
 
     // [POST] /comment
     async createComment(req, res, next){
 
         try {
+            const ideaId = req.body.idea_id 
+            const replyMode = req.body.replierMode
             const newComment = await Comment(req.body)
             const savedComment = await newComment.save()
+
+            //? Check commentMode
+            if(replyMode === false) {
+                //? Get info author of idea
+                const idea = await Idea.findById(ideaId)
+                const authorId = idea[0].user_id
+                const infoAuthor = await User.findById(authorId)
+                const emailAuthor = infoAuthor[0].email
+                const fullNameAuthor = infoAuthor[0].fullname 
+    
+                //? Send email notification to author of idea
+                await notificationMail(emailAuthor, fullNameAuthor, 'idea')
+
+            } else {
+                //? Get info author of idea
+                const idea = await Idea.findById(ideaId)
+                const authorId = idea[0].user_id
+                const infoAuthor = await User.findById(authorId)
+                const emailAuthor = infoAuthor[0].email
+                const fullNameAuthor = infoAuthor[0].fullname 
+
+                //? Send email notification to user
+                
+            }
+
             res.status(200).json(savedComment)
 
         } catch (error) {
