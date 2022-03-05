@@ -1,16 +1,38 @@
 
 const Idea = require('../models/Idea')
 const View = require('../models/View')
+const React = require('../models/React')
+const User = require('../models/User')
+const Submission = require('../models/Submission')
 const paginatedResults = require('../../util/paginated')
+const notificationMail = require('../../util/mail')
 
 class IdeaController {
 
-    // [POST] /idea/create
+    // [POST] /idea/:id/role
     async createIdea(req, res, next){
 
         try {
+            // Create a new idea
             const newIdea = new Idea(req.body)
             const savedIdea = await newIdea.save()
+
+            // Get info user
+            const roleId = req.params.id
+            const user = await User.find({role_id: roleId })
+            
+            // Get a topic
+            const submission = await Submission.findById(req.body.submission_id)
+            const nameTopic = submission[0].name
+
+            // Send notification mail to coordinator
+            for (const element of user) {
+                const fullName = element.fullname
+                const email = element.email
+                const topic = nameTopic
+                await notificationMail(fullName, email, 'coordinator', topic)
+            }
+
             res.status(200).json(savedIdea)
 
         } catch (error) {
@@ -18,7 +40,7 @@ class IdeaController {
         }
     }
 
-    // [PUT] /idea/update/:id
+    // [PATCH] /idea/:id
     async updateIdea(req, res, next){
 
         try {
@@ -47,7 +69,7 @@ class IdeaController {
 
     }
 
-    // [DELETE] /idea/delete/:id
+    // [DELETE] /idea/:id
     async deleteIdea(req, res, next){
 
         try {
@@ -61,6 +83,9 @@ class IdeaController {
             // Delete all views of idea
             await View.deleteMany({idea_id: id})
 
+            // Delete all reaction of idea
+            await React.deleteMany({idea_id: id})
+
             res.status(200).json({
                 message: 'The idea has been deleted.',
                 updated: 'All views in this idea have been deleted.'
@@ -71,7 +96,7 @@ class IdeaController {
         }
     }
 
-    // [GET] /idea?page={}&limit={}
+    // [GET] /ideas?page={}&limit={}
     async getAllIdea(req, res, next){
 
         try {
@@ -86,7 +111,7 @@ class IdeaController {
         }
     }
 
-    // [GET] /idea/one
+    // [GET] /idea/:id
     async getAIdea(req, res, next){
 
         try {

@@ -3,14 +3,14 @@ const Idea = require('../models/Idea')
 
 class ViewController {
 
-    // [POST] /view/create
+    // [POST] /view
     async createNewView(req, res, next) {
 
         try {
             const userId = req.body.user_id
             const ideaId = req.body.idea_id
 
-            // Create a new viewe
+            // Create a new view
             const newView = new View(req.body)
             const savedView = await newView.save()
 
