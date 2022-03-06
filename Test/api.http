@@ -1,0 +1,71 @@
+@baseURL = http://localhost:3000/v1
+
+# User
+@register = register
+@login = login
+
+# POST /register
+POST {{baseURL}}/{{register}}
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+# POST /login
+POST {{baseURL}}/{{login}}
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+# Department
+@depart = department
+@departs = departments
+
+###
+
+# Comment
+@comment = comment
+@comments = comments
+
+###
+
+# Idea
+@idea = idea
+@ideas = ideas
+
+###
+
+# Submission
+@submit = submission
+@submits = submissions
+
+###
+
+# View
+
+###
+
+# Category
+@cate = category
+@cates = categories
+
+###
+
+# Role
+@role = role
+@roles = roles
+
+###
+
+# Reaction Submit
+@rsb = react-submit
+@rsbs = react-submits
+
+

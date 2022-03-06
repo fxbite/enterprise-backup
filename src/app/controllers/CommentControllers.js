@@ -8,6 +8,7 @@ class CommentController {
     async createComment(req, res, next){
 
         try {
+            const commentId = re.body.comment_id
             const ideaId = req.body.idea_id 
             const replyMode = req.body.replierMode
             const newComment = await Comment(req.body)
@@ -27,14 +28,14 @@ class CommentController {
 
             } else {
                 //? Get info author of idea
-                const idea = await Idea.findById(ideaId)
-                const authorId = idea[0].user_id
-                const infoAuthor = await User.findById(authorId)
+                const mainComment = await Comment.findById(commentId)
+                const userId = mainComment[0].user_id
+                const infoAuthor = await User.findById(userId)
                 const emailAuthor = infoAuthor[0].email
                 const fullNameAuthor = infoAuthor[0].fullname 
 
                 //? Send email notification to user
-                
+                await notificationMail(emailAuthor, fullNameAuthor, 'reply')
             }
 
             res.status(200).json(savedComment)
