@@ -14,6 +14,7 @@ const viewController = require('../app/controllers/ViewControllers')
 const categoryController = require('../app/controllers/CategoryControllers')
 const fileController = require('../app/controllers/FileControllers')
 const userController = require('../app/controllers/UserControllers')
+const downloadController = require('../app/controllers/DownloadControllers')
 
 //* Idea
 router.post('/idea/:id/role', ideaController.createIdea) //? Create a idea
@@ -85,6 +86,10 @@ router.put('/react-submit/:id', reactSubmitController.updateReact)     //? Updat
 router.delete('/react-submit/:id', reactSubmitController.deleteReact)  //? Delete a reaction
 router.get('/react-submit/:id', reactSubmitController.getAReact)       //? Get a reaction
 router.get('/react-submits', reactSubmitController.getAllReact)        //? Get all reaction
+
+
+//* Download CSV file
+router.get('/csv/download', downloadController.csvDownload)  //? Download csv
 
 
 module.exports = router
