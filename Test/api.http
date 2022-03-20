@@ -29,16 +29,104 @@ Content-Type: application/json
 @departs = departments
 
 ###
+POST {{baseURL}}/{{depart}}
+Content-Type: application/json
+
+{
+
+}
+
+###
+PUT {{baseURL}}/{{depart}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+DELETE {{baseURL}}/{{depart}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+GET {{baseURL}}/{{depart}}/{id}
+
+###
+GET {{baseURL}}/{{departs}}
+
+###
 
 # Comment
-@comment = comment
-@comments = comments
+@com = comment
+@coms = comments
+
+POST {{baseURL}}/{{com}}
+Content-Type: application/json
+
+{
+
+}
+
+###
+PATCH {{baseURL}}/{{com}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+DELETE {{baseURL}}/{{com}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+GET {{baseURL}}/{{com}}/{id}
+
+###
+GET {{baseURL}}/{{coms}}
 
 ###
 
 # Idea
-@idea = idea
-@ideas = ideas
+@i = idea
+@is = ideas
+
+POST {{baseURL}}/{{i}}/{id}/role 
+Content-Type: application/json
+
+{
+
+}
+
+###
+PATCH {{baseURL}}/{{i}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+DELETE {{baseURL}}/{{i}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+GET {{baseURL}}/{{i}}/{id}
+
+###
+GET {{baseURL}}/{{is}}
 
 ###
 
@@ -46,9 +134,44 @@ Content-Type: application/json
 @submit = submission
 @submits = submissions
 
+POST {{baseURL}}/{{submit}}
+Content-Type: application/json
+
+{
+
+}
+
+###
+PATCH {{baseURL}}/{{submit}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+DELETE {{baseURL}}/{{submit}}/{id}
+Content-Type: application/json
+
+{
+
+}
+
+###
+GET {{baseURL}}/{{submit}}/{id}
+
+###
+GET {{baseURL}}/{{submits}}
+
 ###
 
 # View
+POST {{baseURL}}/view
+Content-Type: application/json
+
+{
+
+}
 
 ###
 
@@ -56,6 +179,12 @@ Content-Type: application/json
 @cate = category
 @cates = categories
 
+POST {{baseURL}}/{{cate}}
+Content-Type: application/json
+
+{
+    
+}
 ###
 
 # Role

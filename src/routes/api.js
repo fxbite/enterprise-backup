@@ -6,7 +6,7 @@ const upload = multer()
 const ideaController = require('../app/controllers/IdeaControllers')
 const commentController = require('../app/controllers/CommentControllers')
 const roleController = require('../app/controllers/RoleControllers')
-const reactController = require('../app/controllers/ReactSubmitControllers')
+const reactController = require('../app/controllers/ReactionControllers')
 const submissionController = require('../app/controllers/SubmissionControllers')
 const reactSubmitController = require('../app/controllers/ReactSubmitControllers')
 const departmentController = require('../app/controllers/DepartmentControllers')
@@ -54,6 +54,10 @@ router.post('/login', userController.loginUser)
 
 
 //* Reaction
+router.post('/reaction', reactController.createReact)
+router.put('/react/:id', reactController.updateReact)
+router.get('/react', reactController.getAllReact)
+
 
 
 //* Category
