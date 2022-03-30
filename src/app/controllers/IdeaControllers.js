@@ -1,7 +1,7 @@
 
 const Idea = require('../models/Idea')
 const View = require('../models/View')
-const React = require('../models/React')
+const React = require('../models/Reaction')
 const User = require('../models/User')
 const Submission = require('../models/Submission')
 const paginatedResults = require('../../util/paginated')

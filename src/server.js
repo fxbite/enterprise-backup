@@ -2,9 +2,23 @@ const express = require('express')
 const morgan  = require('morgan')
 const cors = require('cors')
 const compression = require('compression')
+const session = require('express-session')
 
 const app = express()
 const port = process.env.PORT || 3000
+
+//
+// Session
+app.use(
+    session({
+      secret: 'keyboard cat',
+      resave: true,
+      saveUninitialized: true,
+      cookie: {
+        expires: new Date(Date.now() + 60000 * 60) //? Session expire in 1 hour
+      }
+    })
+  )
 
 // CORS Policy
 app.use(cors())

@@ -197,4 +197,14 @@ Content-Type: application/json
 @rsb = react-submit
 @rsbs = react-submits
 
+###
 
+# File
+POST {{baseURL}}/file/
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="document"; filename="test.jpg"
+Content-Type: image/jpeg,image/png,application/zip, 
+
+< ./upload/test.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

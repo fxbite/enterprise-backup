@@ -48,7 +48,7 @@ class DepartmentController {
         }
     }
 
-    // [GET] /department
+    // [GET] /departments
     async getAllDepart(req, res, next){
 
         try {

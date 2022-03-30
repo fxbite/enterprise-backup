@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const ReactSchema = new mongoose.Schema({
+const ReactionSchema = new mongoose.Schema({
 
     idea_id: {type: String, required: true},
     user_id: {type: String,  required: true},
@@ -9,4 +9,4 @@ const ReactSchema = new mongoose.Schema({
 }, {timestamps: true}
 )
 
-module.exports = mongoose.model('React', ReactSchema, 'reaction')
+module.exports = mongoose.model('Reaction', ReactionSchema, 'reaction')

@@ -12,7 +12,7 @@ class FileController {
             const fileName = req.file.originalname
             const typeFile = req.file.mimetype
             const fileObj = req.file
-            const ideaId = req.params.id 
+            const ideaId = req.params.id
 
             // Buffer file
             const bufferStream = await new stream.PassThrough()

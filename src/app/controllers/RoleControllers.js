@@ -48,7 +48,7 @@ class RoleController {
         }
     }
 
-    // [GET] /role
+    // [GET] /roles
     async getAllRole(req, res, next){
 
         try {

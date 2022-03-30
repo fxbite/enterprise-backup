@@ -1,40 +1,27 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const {registerValidation, loginValidation} = require('../../util/validation')
-const {ACCESS_TOKEN_SECRET} = require('../../config/variables')
+const {registerValidation, loginValidation} = require('../../middleware/validation')
 class UserController {
 
     // [POST] /register
     async registerUser(req, res, next){
-
-        // Validate data before using
-        const {error} =  registerValidation(req.body)
-        if(error) return res.status(400).json({message: error.details[0].message})
-
-        // Check if the user is already in the db
-        const emailExist = await User.findOne({email: req.body.email})
-        if(emailExist) return res.status(400).json({message: 'Email already exists'})
-
-        const userNameExist = await User.findOne({username: req.body.username})
-        if(userNameExist) return res.status(400).json({message: 'Username already exists'})
-
-        // Hash password
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(req.body.password, salt)
-
-        // Create a new user
-        const newUser = new User({
-            username: req.body.username,
-            email: req.body.email,
-            fullname: req.body.fullname,
-            password: hashedPassword,
-            role_id: req.body.roleId,
-            department_id: req.body.deprtId
-        })
-
+  
         try {
-            const savedUser = newUser.save()
+            // Hash password
+            const salt = bcrypt.genSaltSync(10)
+            const hashedPassword = bcrypt.hashSync(req.body.password, salt)
+    
+            // Create a new user
+            const newUser = new User({
+                username: req.body.username,
+                email: req.body.email,
+                fullname: req.body.fullname,
+                password: hashedPassword,
+                role_id: req.body.roleId,
+                department_id: req.body.departId
+            })
+
+            const savedUser = await newUser.save()
             res.status(200).json(savedUser)
 
         } catch (error) {
@@ -42,27 +29,85 @@ class UserController {
         }
     }
 
-    // [POST /login
+    // [POST] /login
     async loginUser(req, res, next){
 
-        // Validate data before using
-        const {error} =  loginValidation(req.body)
-        if(error) return res.status(400).json({message: error.details[0].message})
+        try {
+            const {username, password} = req.body
+            const user = await User.findOne({username: username})
+            
+            if(!user) {
+                return res.status(401).json('Username or password is incorrect') 
+            }
 
-         // Check if the username is exists
-        const user = await User.findOne({username: req.body.username})
-        if(!user) return res.status(400).json({message: 'Username not found'})
+            const hashedPassword = user.password
+            const check = bcrypt.compareSync(password, hashedPassword)
+            
+            if(check) {
+                req.session.logged = true
+                req.session.role = user['role_id']
+                return res.status(200).json('Login Successfully')
+            } else {
+                return res.status(401).json('Username or password is incorrect')
+            }
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
 
-        // Check password is correct 
-        const validPass = await bcrypt.compare(req.body.password, user.password)
-        if (!validPass) return res.status(400).json({message: 'Invalid Password'})
+    // [POST] /logout
+    async logout(req, res, next) {
+        if (req.session) {
+          req.session.destroy((err) => {
+            if (err) {
+              res.status(400).json('Unable to log out');
+            }
+            return res.status(200).json('Logout Successfully')
+          });
+        } else {
+          res.end();
+        }
+    }
+    
+    // [PATCH] /user/:id
+    async updateUser(req, res, next) {
+        try {
+            let updatedUser = {}
+            if(req.body.password === undefined) {
+                updatedUser = {
+                    username: req.body.username,
+                    email: req.body.email,
+                    fullname: req.body.fullname,
+                    role_id: req.body.roleId,
+                    department_id: req.body.departId
+                }
+            } else {
+                //? Hash password
+                const salt = bcrypt.genSaltSync(10);
+                const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-        // Create and assign a token 
-        const token = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET )
-        res.status(200).header('auth-token', token).json({
-            message: 'Login Successfully',
-            'access-token': token
-        })
+                updatedUser = {
+                    username: req.body.username,
+                    email: req.body.email,
+                    fullname: req.body.fullname,
+                    password: hashedPassword,
+                    role_id: req.body.roleId,
+                    department_id: req.body.departId
+                }
+            }
+            
+            if(updatedUser !== null) {
+                const user = await User.findById(req.params.id)
+                await user.updateOne({$set: updatedUser})
+            }
+            const user = await User.findById(req.params.id)
+            res.status(200).json({
+                message: 'The user is updated',
+                user: user
+            })
+        } catch (error) {
+            res.status(500).json(error)
+        }
     }
 
     // [DELETE] /user/:id
@@ -79,6 +124,27 @@ class UserController {
             res.status(500).json(error)
         }
     }
+
+    // [GET] /user/:id
+    async getAUser(req, res, next) {
+        try {
+            const user = await User.findById(req.params.id)
+            res.status(200).json(user)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    // [GET] /users
+    async getAllUser(req, res, next) {
+        try {
+            const users = await User.find({})
+            res.status(200).json(users)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+    
 }
 
 module.exports = new UserController

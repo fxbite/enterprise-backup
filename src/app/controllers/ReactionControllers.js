@@ -1,4 +1,4 @@
-const React = require('../models/React')
+const React = require('../models/Reaction')
 const Idea = require('../models/Idea')
 class ReactionController {
 
@@ -31,7 +31,7 @@ class ReactionController {
         }
     }
 
-    // [PUT] /react/:id
+    // [PATCH] /react/:id
     async updateReact(req, res, next){
 
         try {
