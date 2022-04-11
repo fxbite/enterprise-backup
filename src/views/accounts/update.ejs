@@ -1,0 +1,66 @@
+
+<div class="row g-5">
+    <div class="col-md-11 col-lg-12">
+        <h4 class="mb-3">Update User</h4>
+        <form class="register-account" action="/user/<% if(typeof(users) !== 'undefined') { %><%= users._id %> <% } %>?_method=PATCH" method="post">
+            <div class="row g-3">
+            <div class="col-sm-6">
+                <label for="firstName" class="form-label">User Name</label>
+                <input type="text" class="form-control" id="userName" placeholder="" <% if(typeof(users) !== 'undefined') { %>value="<%= users.username %>"<% } %> name="username">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="lastName" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="" <% if(typeof(users) !== 'undefined') { %>value="<%= users.email %>"<% } %>  name="email">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="username" class="form-label">Password</label>
+                <input type="text" class="form-control" id="password" placeholder="" value="" name="password">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="email" class="form-label">Confirm Password</label>
+                <input type="email" class="form-control" id="cfPassword" placeholder="" value="" name="cfPassword">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="address" class="form-label">Role</label>
+                <select class="form-select" aria-label="Default select example" name="role">
+                    <option value="0" selected="" disabled=""></option>
+                    <% if(typeof(roles) !== 'undefined') { %>
+                    <% roles.forEach(value => { %> 
+                        <option <% if(typeof(users) !== 'undefined' && user.role._id === value._id) { %>selected="selected"<% } %> value="<%= value._id %>"><%= value.name %></option>
+                    <% }) %> 
+                    <% } %> 
+                </select>
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="address2" class="form-label">Department</label>
+                <select class="form-select" aria-label="Default select example" name="department">
+                    <option value="0" selected="" disabled=""></option>
+                    <% if(typeof(departments) !== 'undefined') { %>
+                    <% departments.forEach(value => { %> 
+                        <option <% if(typeof(users) !== 'undefined' && user.department._id === value._id) { %>selected="selected"<% } %> value="<%= value._id %> "><%= value.name %></option>
+                    <% }) %> 
+                    <% } %> 
+                </select>
+                <div class="invalid-feedback">
+                </div>
+            </div>
+            <hr class="my-4">
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Update</button>
+        </form>
+    </div>
+</div>

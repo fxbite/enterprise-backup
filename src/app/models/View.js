@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
+const {Schema, model} = require('mongoose')
 
-const ViewSchema = new mongoose.Schema({
+const ViewSchema = new Schema({
 
-    idea_id: {type: String, required: true},
-    user_id: {type: String, required: true}
+    idea: {type: Schema.Types.ObjectId, required: true, ref: 'Idea'},
+    user: {type: Schema.Types.ObjectId, required: true, ref: 'User'}
 
 }, {timestamps: true}
 )
 
-module.exports = mongoose.model('View', ViewSchema, 'view')
+module.exports = model('View', ViewSchema, 'view')

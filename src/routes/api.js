@@ -56,12 +56,17 @@ router.post('/file/:id/idea', requiredLogin, upload.single('document'), fileCont
 
 
 //* User
+//~ Server rendering
 router.post('/register', requiredLogin, registerSchema, validateRequest, userController.registerUser)
-router.post('/login', loginSchema, validateRequest, userController.loginUser)
+router.get('/login', userController.showLogin)
+router.post('/login/auth', loginSchema, validateRequest, userController.authLogin)
 router.post('/logout', requiredLogin, userController.logout)
-router.patch('/user/:id', userController.updateUser)
-router.delete('/user/:id', userController.deleteUser)
-router.get('/user/:id', userController.getAUser)
+
+//~ For API
+router.route('/user/:id')
+    .patch(userController.updateUser)
+    .delete(userController.deleteUser)
+    .get(userController.getAUser)
 router.get('/users', userController.getAllUser)
 
 

@@ -1,18 +1,18 @@
-const mongoose = require('mongoose')
+const {Schema, model} = require('mongoose')
 
-const IdeaSchema = new mongoose.Schema({
+const IdeaSchema = new Schema({
 
     title: {type: String, required: true},
     description: {type: String, required: true, default: ""},
     content: {type: String, required: true},
     anonymousMode: {type: Boolean, default: false},
-    user_id: {type: String, required: true},
-    submission_id: {type: String, required: true},
-    category_id: {type: String, required: true},
+    user: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
+    submission: {type: Schema.Types.ObjectId, required: true, ref: 'Submission'},
+    category: [{type: Schema.Types.ObjectId, required: true, ref: 'Category'}],
     total_view: {type: String, default: ""},
     total_reaction: {type: String, default: ""}
 
 }, {timestamps: true}
 )
 
-module.exports = mongoose.model('Idea', IdeaSchema, 'idea')
+module.exports = model('Idea', IdeaSchema, 'idea')

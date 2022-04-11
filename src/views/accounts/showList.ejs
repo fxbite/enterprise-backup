@@ -1,0 +1,56 @@
+<div class="row g-5">
+    <div class="col-md-11 col-lg-12">
+        <div class="row g-3 justify-content-center">
+
+            <!-- Pagination using helper  -->
+            <% if(typeof(users) !== 'undefined') { %> 
+                <%- pagination(current, pages) %> 
+            <% } %> 
+
+        </div>
+        <div class="row g-3" style="margin-top: 1%; margin-bottom: 15px;">
+            <div class="col-sm-2">
+                <a class="w-100 btn btn-info btn-rounded btn-lg" href="/new-user" id="btn-create-user">New</a>
+            </div>
+        </div>
+        <div class="row g-3" style="padding: 0 25px; padding-top: 2px;">
+            <div id="tableFixHead">
+                <table class="table-hover">
+                    <thead>
+                        <tr>
+                        <th width="20%">Username</th>
+                        <th width="20%">Email</th>
+                        <th width="20%">Full Name</th>
+                        <th width="20%">Role</th>
+                        <th width="20%">Department</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach((user) => { %>
+                            <tr>
+                                <td><%= user.username %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.fullname %></td>
+                                <td><%= user.role.name %></td>
+                                <td><%= user.department.name %></td>
+                                <td>
+                                    <ul class="list-inline m-0">
+                                        <li class="list-inline-item">
+                                            <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        <% }) %>               
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<link rel="stylesheet" href="/css/table.css">

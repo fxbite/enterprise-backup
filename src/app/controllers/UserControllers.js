@@ -29,12 +29,21 @@ class UserController {
         }
     }
 
-    // [POST] /login
-    async loginUser(req, res, next){
+    // [GET] /login
+    async showLogin(req, res, next) {
+        try {
+            res.render('login/index', {layout: false})
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    // [POST] /login/auth
+    async authLogin(req, res, next) {
 
         try {
             const {username, password} = req.body
-            const user = await User.findOne({username: username})
+            const user = await User.findOne({username: username}).populate('role_id')
             
             if(!user) {
                 return res.status(401).json('Username or password is incorrect') 
@@ -45,10 +54,12 @@ class UserController {
             
             if(check) {
                 req.session.logged = true
-                req.session.role = user['role_id']
-                return res.status(200).json('Login Successfully')
+                req.session.role = user['role_id']['_id']
+                req.session.userName = user.fullname
+                return res.redirect(200, '/')
             } else {
-                return res.status(401).json('Username or password is incorrect')
+                req.flash()
+                return res.redirect(401, '/login')
             }
         } catch (error) {
             res.status(500).json(error)
@@ -62,7 +73,8 @@ class UserController {
             if (err) {
               res.status(400).json('Unable to log out');
             }
-            return res.status(200).json('Logout Successfully')
+            res.clearCookie('sid')
+            res.status(200).json('Logout Successfully')
           });
         } else {
           res.end();

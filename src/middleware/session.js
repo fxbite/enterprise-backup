@@ -1,9 +1,7 @@
-const User = require('../app/models/User')
 
 const requiredLogin = (req, res, next) => {
     try {
-        const status = req.session.logged
-        if (status === true) {
+        if (req.session.logged) {
             next();
           } else {
             return res.status(401).json('Required Login')
@@ -13,7 +11,7 @@ const requiredLogin = (req, res, next) => {
     }
 }
 
-const managerRole = async(req, res, next) => {
+const managerRole = (req, res, next) => {
   try {
     const access = ['623ec78019af8a0d9cd33b7e', '623ec6b919af8a0d9cd33b74']
     const status = req.session.role 

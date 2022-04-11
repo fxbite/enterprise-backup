@@ -1,14 +1,15 @@
-const mongoose = require('mongoose')
+const {Schema, model} = require('mongoose')
 
-const FileSchema = new mongoose.Schema({
+const FileSchema = new Schema({
 
     file_id_drive: {type: String, required: true},
     file_path: {type: String, required: true},
-    idea_id: {type: String, required: true},
-    folder_id : {type: String, required: true}
+    idea: {type: Schema.Types.ObjectId, required: true, ref: 'Idea'},
+    folder : {type: Schema.Types.ObjectId, required: true, ref: 'Folder'}
 
 }, {timestamps: true}
 )
 
-module.exports = mongoose.model('File', FileSchema, 'file')
+module.exports = model('File', FileSchema, 'file')
+
 

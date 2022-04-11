@@ -3,25 +3,35 @@ const morgan  = require('morgan')
 const cors = require('cors')
 const compression = require('compression')
 const session = require('express-session')
+const {sessionStore} = require('./config/sessionDB')
+const flash = require('connect-flash')
+const methodOverride = require('method-override')
+const path = require('path')
+const expressLayouts = require('express-ejs-layouts')
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
-//
 // Session
 app.use(
     session({
       secret: 'keyboard cat',
-      resave: true,
-      saveUninitialized: true,
+      resave: false,
+      saveUninitialized: false,
       cookie: {
-        expires: new Date(Date.now() + 60000 * 60) //? Session expire in 1 hour
-      }
+        maxAge: 60000 //? Session expire in 1 hour
+      },
+      store: sessionStore, 
+      name: 'sid'
     })
   )
 
 // CORS Policy
-app.use(cors())
+const whiteList = ['http://localhost:3000']
+app.use(cors({
+  origin: whiteList,
+  credentials: true,
+}))
 
 // Middleware
 app.use(express.json())
@@ -40,6 +50,22 @@ app.use(compression(
         } 
     }
 ))
+
+// Flash
+app.use(flash());
+
+// Override
+app.use(methodOverride('_method'));
+
+
+// Public
+app.use(express.static(path.join(__dirname, './public')));
+
+
+// Template Engine
+app.set('views', path.join(__dirname, './views'));
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
 
 // Logger
 app.use(morgan('dev'))
