@@ -8,6 +8,7 @@ const flash = require('connect-flash')
 const methodOverride = require('method-override')
 const path = require('path')
 const expressLayouts = require('express-ejs-layouts')
+const showData = require('./middleware/helpers')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -25,6 +26,10 @@ app.use(
       name: 'sid'
     })
   )
+
+// Helper
+app.use(showData)
+
 
 // CORS Policy
 const whiteList = ['http://localhost:3000']

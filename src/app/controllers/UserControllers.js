@@ -17,12 +17,12 @@ class UserController {
                 email: req.body.email,
                 fullname: req.body.fullname,
                 password: hashedPassword,
-                role_id: req.body.roleId,
-                department_id: req.body.departId
+                role: req.body.role,
+                department: req.body.department
             })
 
             const savedUser = await newUser.save()
-            res.status(200).json(savedUser)
+            res.redirect(200, '/user-management')
 
         } catch (error) {
             res.status(400).json(error)
@@ -90,8 +90,8 @@ class UserController {
                     username: req.body.username,
                     email: req.body.email,
                     fullname: req.body.fullname,
-                    role_id: req.body.roleId,
-                    department_id: req.body.departId
+                    role: req.body.role,
+                    department: req.body.department
                 }
             } else {
                 //? Hash password
@@ -103,8 +103,8 @@ class UserController {
                     email: req.body.email,
                     fullname: req.body.fullname,
                     password: hashedPassword,
-                    role_id: req.body.roleId,
-                    department_id: req.body.departId
+                    role: req.body.role,
+                    department: req.body.department
                 }
             }
             

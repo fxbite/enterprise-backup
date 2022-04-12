@@ -3,6 +3,12 @@ const tz = require('moment-timezone')
 
 const showDate = (req, res, next) => {
 
+    //? toString
+    res.locals.toString = (value) => {
+
+      return value.toString()
+    }
+
     //? Show login name
     res.locals.userName = req.session.userName
 

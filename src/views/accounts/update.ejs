@@ -2,7 +2,7 @@
 <div class="row g-5">
     <div class="col-md-11 col-lg-12">
         <h4 class="mb-3">Update User</h4>
-        <form class="register-account" action="/user/<% if(typeof(users) !== 'undefined') { %><%= users._id %> <% } %>?_method=PATCH" method="post">
+        <form class="register-account" action="/user/<% if(typeof(users) !== 'undefined') { %><%= users._id %><% } %>?_method=PATCH" method="post">
             <div class="row g-3">
             <div class="col-sm-6">
                 <label for="firstName" class="form-label">User Name</label>
@@ -34,11 +34,11 @@
 
             <div class="col-sm-6">
                 <label for="address" class="form-label">Role</label>
-                <select class="form-select" aria-label="Default select example" name="role">
+                <select class="form-select" aria-label="Default select example" name="roleId">
                     <option value="0" selected="" disabled=""></option>
                     <% if(typeof(roles) !== 'undefined') { %>
                     <% roles.forEach(value => { %> 
-                        <option <% if(typeof(users) !== 'undefined' && user.role._id === value._id) { %>selected="selected"<% } %> value="<%= value._id %>"><%= value.name %></option>
+                        <option <% if(typeof(users) !== 'undefined' && String(users.role) === String(value._id)) { %>selected<% } %>  value="<%= value._id %>"><%= value.name %></option>
                     <% }) %> 
                     <% } %> 
                 </select>
@@ -48,19 +48,21 @@
 
             <div class="col-sm-6">
                 <label for="address2" class="form-label">Department</label>
-                <select class="form-select" aria-label="Default select example" name="department">
+                <select class="form-select" aria-label="Default select example" name="departId">
                     <option value="0" selected="" disabled=""></option>
                     <% if(typeof(departments) !== 'undefined') { %>
-                    <% departments.forEach(value => { %> 
-                        <option <% if(typeof(users) !== 'undefined' && user.department._id === value._id) { %>selected="selected"<% } %> value="<%= value._id %> "><%= value.name %></option>
-                    <% }) %> 
+                        <% departments.forEach(value => { %> 
+                            <option <% if(typeof(users) !== 'undefined' && String(users.department) === String(value._id)) { %>selected<% } %> value="<%= value._id %>"><%= value.name %></option>
+                        <% }) %> 
                     <% } %> 
                 </select>
                 <div class="invalid-feedback">
                 </div>
             </div>
             <hr class="my-4">
-            <button class="w-100 btn btn-primary btn-lg" type="submit">Update</button>
+            <div class="col-md-3">
+                <button class="w-100 btn btn-warning btn-lg" type="submit">Update</button>
+            </div>
         </form>
     </div>
 </div>

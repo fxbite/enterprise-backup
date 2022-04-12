@@ -16,7 +16,7 @@ const fileController = require('../app/controllers/FileControllers')
 const userController = require('../app/controllers/UserControllers')
 const downloadController = require('../app/controllers/DownloadControllers')
 const folderController = require('../app/controllers/FolderControllers')
-
+const renderController = require('../app/controllers/RenderControllers')
 
 //? Session
 const {requiredLogin, coordinatorRole, managerRole} = require('../middleware/session')
@@ -57,6 +57,9 @@ router.post('/file/:id/idea', requiredLogin, upload.single('document'), fileCont
 
 //* User
 //~ Server rendering
+router.get('/user-management', renderController.crudUser)
+router.get('/user-register', renderController.registerUser)
+router.get('/user-update/:id', renderController.updateUser)
 router.post('/register', requiredLogin, registerSchema, validateRequest, userController.registerUser)
 router.get('/login', userController.showLogin)
 router.post('/login/auth', loginSchema, validateRequest, userController.authLogin)
