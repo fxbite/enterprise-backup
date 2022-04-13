@@ -1,13 +1,9 @@
 const moment = require('moment')
+const {Folder, User} = require('../app/models')
 const tz = require('moment-timezone')
+const mongoose = require('mongoose')
 
 const showDate = (req, res, next) => {
-
-    //? toString
-    res.locals.toString = (value) => {
-
-      return value.toString()
-    }
 
     //? Show login name
     res.locals.userName = req.session.userName
@@ -33,7 +29,7 @@ const showDate = (req, res, next) => {
     }
 
     //? Format time and timezone for forum
-    res.locals.formatDateSubmission = (value) => {
+    res.locals.formatDateForum = (value) => {
 
         moment.updateLocale('en', {
             relativeTime: {

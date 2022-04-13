@@ -1,4 +1,4 @@
-const User = require('../models/User')
+const {User} = require('../models')
 const bcrypt = require('bcrypt')
 const {registerValidation, loginValidation} = require('../../middleware/validation')
 class UserController {
@@ -22,7 +22,7 @@ class UserController {
             })
 
             const savedUser = await newUser.save()
-            res.redirect(200, '/user-management')
+            res.redirect('/user-management')
 
         } catch (error) {
             res.status(400).json(error)
@@ -56,10 +56,10 @@ class UserController {
                 req.session.logged = true
                 req.session.role = user['role_id']['_id']
                 req.session.userName = user.fullname
-                return res.redirect(200, '/')
+                return res.redirect('/')
             } else {
                 req.flash()
-                return res.redirect(401, '/login')
+                return res.redirect('/login')
             }
         } catch (error) {
             res.status(500).json(error)
@@ -85,7 +85,7 @@ class UserController {
     async updateUser(req, res, next) {
         try {
             let updatedUser = {}
-            if(req.body.password === undefined) {
+            if(req.body.password === '') {
                 updatedUser = {
                     username: req.body.username,
                     email: req.body.email,
@@ -113,10 +113,7 @@ class UserController {
                 await user.updateOne({$set: updatedUser})
             }
             const user = await User.findById(req.params.id)
-            res.status(200).json({
-                message: 'The user is updated',
-                user: user
-            })
+            res.redirect('/user-management')
         } catch (error) {
             res.status(500).json(error)
         }
@@ -128,10 +125,7 @@ class UserController {
         try {
             const user = await User.findById(req.params.id)
             await user.deleteOne()
-            res.status(200).json({
-                message: 'The user has been deleted.'
-            })
-
+            res.redirect('/user-management')
         } catch (error) {
             res.status(500).json(error)
         }

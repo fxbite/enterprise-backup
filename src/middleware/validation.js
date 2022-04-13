@@ -70,20 +70,14 @@ const registerSchema = [
         .bail()
         .isLength({max: 100})
         .withMessage('Full name in 100 characters'),
-    body('roleId')
+    body('role')
         .not()
         .isEmpty()
-        .withMessage('Role is required')
-        .bail()
-        .isLength({max: 30})
-        .withMessage('Role in 30 character'),
-    body('departId')
+        .withMessage('Role is required'),
+    body('department')
         .not()
         .isEmpty()
         .withMessage('Department is required')
-        .bail()
-        .isLength({max: 30})
-        .withMessage('Department in 30 characters')
 ]
 
 const loginSchema = [

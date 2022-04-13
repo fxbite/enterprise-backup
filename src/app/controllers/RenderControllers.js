@@ -1,4 +1,4 @@
-const {User, Role, Department} = require('../models')
+const {User, Role, Department, Submission} = require('../models')
 class RenderControllers {
 
     // [GET] /user-management?page={}&limit={}
@@ -71,7 +71,8 @@ class RenderControllers {
         }
     }
 
-    // [GET] /export
+    //TODO: REPORT
+    // [GET] /report
     async exportData(req, res, next) {
         try {
             res.status(200).render('report/index', {layout: 'layouts/dashboard'})
@@ -80,6 +81,7 @@ class RenderControllers {
         }
     }
 
+    //TODO
     // [GET] /forums
     async showForum(req, res, next) {
         try {
@@ -89,6 +91,7 @@ class RenderControllers {
         }
     }
 
+    //TODO
     // [GET] /all-ideas
     async showAllIdeas(req, res, next) {
         try {
@@ -98,6 +101,7 @@ class RenderControllers {
         }
     }
 
+    //TODO
     // [GET] /idea-register
     async registerIdea(req, res, next) {
         try {
@@ -107,10 +111,59 @@ class RenderControllers {
         }
     }
 
+    //TODO
     // [GET] /idea-update
     async updateIdea(req, res, next) {
         try {
             res.status(200).render('idea/update')
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
+    // [GET] /submission-management?page{}&limit={}
+    async crudSubmission(req, res, next) {
+        try {
+            const limitAsNumber = parseInt(req.query.limit)
+            const pageAsNumber = parseInt(req.query.page)
+
+            let page = 1
+            if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
+                page = pageAsNumber;
+            }
+
+            let limit = 10
+            if (!Number.isNaN(limitAsNumber) && !(limitAsNumber > 10) && !(limitAsNumber < 1)) {
+                limit = limitAsNumber;
+            }
+
+            const submissions = await Submission.find().populate('folder').skip((limit * page) - limit).limit(limit)
+            const count = submissions.length
+            res.status(200).render('submission/showList', {
+                layout: 'layouts/dashboard', submissions, current: page, pages: Math.ceil(count / limit),
+            })
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
+    // [GET] /submission-register
+    async registerSubmission(req, res, next) {
+        try {
+            res.status(200).render('submission/register', {layout: 'layouts/dashboard'})
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
+    // [GET] /submission-update
+    async updateSubmission(req, res, next) {
+        try {
+            const submissionId = req.params.id 
+            const submissions = await Submission.findById(submissionId)
+            res.status(200).render('submission/update', {
+                layout: 'layouts/dashboard', submissions
+            })
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }

@@ -40,11 +40,19 @@ router.get('/comments', requiredLogin, commentController.showAllComment)        
 
 
 //* Submission
-router.post('/submission', requiredLogin, coordinatorRole, submissionController.createSubmission)        //? Create a topic
-router.patch('/submission/:id', requiredLogin, coordinatorRole, submissionController.updateSubmission)   //? Update a topic
-router.delete('/submission/:id', requiredLogin, coordinatorRole, submissionController.deleteSubmission)  //? Delete a topic
-router.get('/submission/:id', requiredLogin, coordinatorRole, submissionController.getASubmission)       //? Get a topic
-router.get('/submissions', requiredLogin, coordinatorRole, submissionController.getAllSubmission)        //? Get all topics
+//~ Server rendering
+//TODO: Add requiredLogin && coordinatorRole 
+router.get('/submission-management', renderController.crudSubmission)
+router.get('/submission-register', renderController.registerSubmission)
+router.get('/submission-update/:id', renderController.updateSubmission)
+router.post('/submission', submissionController.createSubmission) 
+
+//~ For API
+router.route('/submission/:id')
+    .patch(submissionController.updateSubmission)  //? Using with server rending
+    .delete(submissionController.deleteSubmission) //? Using with server rending
+    .get(submissionController.getASubmission)
+router.get('/submissions', submissionController.getAllSubmission)   
 
 
 //* View
@@ -56,19 +64,20 @@ router.post('/file/:id/idea', requiredLogin, upload.single('document'), fileCont
 
 
 //* User
-//~ Server rendering
+//~ Server rendering 
+//TODO: Add requiredLogin
 router.get('/user-management', renderController.crudUser)
 router.get('/user-register', renderController.registerUser)
 router.get('/user-update/:id', renderController.updateUser)
-router.post('/register', requiredLogin, registerSchema, validateRequest, userController.registerUser)
+router.post('/register', registerSchema, validateRequest, userController.registerUser) 
 router.get('/login', userController.showLogin)
 router.post('/login/auth', loginSchema, validateRequest, userController.authLogin)
-router.post('/logout', requiredLogin, userController.logout)
+router.post('/logout', userController.logout)
 
 //~ For API
 router.route('/user/:id')
-    .patch(userController.updateUser)
-    .delete(userController.deleteUser)
+    .patch(userController.updateUser)    //? Using with server rending
+    .delete(userController.deleteUser)   //? Using with server rending
     .get(userController.getAUser)
 router.get('/users', userController.getAllUser)
 
