@@ -1,4 +1,4 @@
-const {User, Role, Department, Submission} = require('../models')
+const {User, Role, Department, Submission, Category} = require('../models')
 class RenderControllers {
 
     // [GET] /user-management?page={}&limit={}
@@ -105,7 +105,8 @@ class RenderControllers {
     // [GET] /idea-register
     async registerIdea(req, res, next) {
         try {
-            res.status(200).render('idea/register')
+            const categories = await Category.find()
+            res.status(200).render('idea/register', {layout: 'layouts/forum', categories})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#summernote').summernote({
+    $('.summernote').summernote({
       height: 200,
       toolbar: [
         ['style', ['style']],

@@ -24,6 +24,10 @@ const {registerSchema, loginSchema} = require('../middleware/validation')
 const {validateRequest} = require('../middleware/handlerError')
 
 //* Idea
+//~ Server rendering
+router.get('/idea-register', renderController.registerIdea)
+
+//~ For API
 router.post('/idea/:id/role', requiredLogin, ideaController.createIdea) //? Create a idea
 router.patch('/idea/:id', requiredLogin, ideaController.updateIdea)     //? Update a idea
 router.delete('/idea/:id', requiredLogin, ideaController.deleteIdea)    //? Delete a idea & delete all views 
