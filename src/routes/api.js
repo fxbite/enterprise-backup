@@ -26,6 +26,10 @@ const {validateRequest} = require('../middleware/handlerError')
 //* Idea
 //~ Server rendering
 router.get('/idea-register', renderController.registerIdea)
+router.get('/idea-update/:id', renderController.updateIdea)
+router.get('/all-ideas', renderController.showAllIdeas)
+router.get('/all-submissions', renderController.showForum)
+router.get('/idea/detail', renderController.showDetailIdea)
 
 //~ For API
 router.post('/idea/:id/role', requiredLogin, ideaController.createIdea) //? Create a idea

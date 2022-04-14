@@ -1,4 +1,4 @@
-const {User, Role, Department, Submission, Category} = require('../models')
+const {User, Role, Department, Submission, Category, Idea} = require('../models')
 class RenderControllers {
 
     // [GET] /user-management?page={}&limit={}
@@ -82,7 +82,7 @@ class RenderControllers {
     }
 
     //TODO
-    // [GET] /forums
+    // [GET] /all-submissions
     async showForum(req, res, next) {
         try {
             res.status(200).render('forum/showSubmission', {layout: 'layouts/forum'})
@@ -102,6 +102,15 @@ class RenderControllers {
     }
 
     //TODO
+    // [GET] /idea/:id/detail
+    async showDetailIdea(req, res, next) {
+        try {
+            res.status(200).render('forum/ideaDetail', {layout: 'layouts/forum'})
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
     // [GET] /idea-register
     async registerIdea(req, res, next) {
         try {
@@ -113,10 +122,12 @@ class RenderControllers {
     }
 
     //TODO
-    // [GET] /idea-update
+    // [GET] /idea-update/:id
     async updateIdea(req, res, next) {
         try {
-            res.status(200).render('idea/update')
+            const ideaId = req.params.id
+            const ideas = await Idea.findById(ideaId)
+            res.status(200).render('idea/update', {layout: 'layouts/forum', ideas})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }

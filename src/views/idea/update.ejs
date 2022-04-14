@@ -26,7 +26,7 @@
                     <option value="" selected="" disabled=""></option>
                     <% if(typeof(categories) !== 'undefined') { %>
                         <% categories.forEach(value => { %> 
-                            <option <% if(typeof(ideas) !== 'undefined' && String(ideas.category) ==== String(value._id)) { %>selected<% } %>   value="<%= value._id %>"><%= value.name %></option>
+                            <option <% if(typeof(ideas) !== 'undefined' && String(ideas.category) === String(value._id)) { %>selected<% } %>   value="<%= value._id %>"><%= value.name %></option>
                         <% }) %>  
                     <% } %>  
                   </select>
