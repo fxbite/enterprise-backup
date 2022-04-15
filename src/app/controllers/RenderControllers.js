@@ -1,4 +1,5 @@
 const {User, Role, Department, Submission, Category, Idea} = require('../models')
+const _ = require('lodash')
 class RenderControllers {
 
     // [GET] /user-management?page={}&limit={}
@@ -93,7 +94,7 @@ class RenderControllers {
 
     //TODO: REPORT
     // [GET] /report
-    async exportData(req, res, next) {
+    async chartData(req, res, next) {
         try {
             res.status(200).render('report/index', {layout: 'layouts/dashboard'})
         } catch (error) {
@@ -198,6 +199,35 @@ class RenderControllers {
             })
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
+        }
+    }
+
+    //~ [GET] /test
+    async test(req, res, next) {
+        try {
+            const arrayCategories = [
+                '624484188625d71a055bbf2d', 
+                '6245049f526504896d5af41d',
+                '624ee438d53c1f13bb11ca9c'
+            ]
+            const categories = await Category.find().select('_id')
+            for(const element of categories) {
+                const cateId = String(element._id)
+                if(_.includes(arrayCategories, cateId) === true) {
+                    const category = await Category.findById(cateId)
+                    if(category.use === '') {
+                        await Category.findByIdAndUpdate(cateId, {use: '1'})
+                    } else {
+                        let useNumber = parseInt(category.use)
+                        const updateUseNumber = useNumber + 1
+                        await Category.findByIdAndUpdate(cateId, {use: updateUseNumber})
+                    }
+                }
+            }
+            const updatedCategories = await Category.find()
+            console.log(updatedCategories);
+        } catch (error) {
+            res.status(500).json(error)
         }
     }
 

@@ -61,7 +61,6 @@ class ReactionController {
         }
     }
 
-    
 }
 
 module.exports = new ReactionController

@@ -2,7 +2,8 @@ const Idea = require('../models/Idea')
 const Submission = require('../models/Submission')
 const Category = require('../models/Category')
 const User = require('../models/User')
-const CsvParser = require("json2csv").Parser;
+const exportCSV = require('../../util/exportCSV')
+const {parse, Parser} = require('json2csv')
 
 class DownloadController {
 
@@ -10,9 +11,13 @@ class DownloadController {
     async csvDownload(req, res, next) {
 
         try {
-            const ideas = await Idea.find({})
+            const ideas = await Idea.find()
+                .populate('user')
+                .populate('submission')
+                .populate('category')
+
             let csv = [];
-            ideas.forEach(async(obj) => {
+            ideas.forEach((obj) => {
 
                 // Get id
                 const userId = obj.user_id
@@ -29,40 +34,102 @@ class DownloadController {
                 const categoryName = categoryInfo.name
 
                 const dataExported = {
-                  id: obj._id,
-                  title: obj.title,
-                  description: obj.description,
+                  ideaId: obj._id,
+                  ideaTitle: obj.title,
+                  ideaDescription: obj.description,
                   content: obj.content,
-                  anonymousMode: obj.anonymousMode,
                   email: email,
-                  fullName: fullName,
-                  topic: submitName,
+                  role: ,
                   category: categoryName,
+                  department: ,
+                  title: ,
+                  description: ,
+                  closure_date: ,
+                  final_closure_date: ,
                   totalViews: obj.total_view,
-                  totalReaction: obj.total_reaction
               };
               
               csv.push(dataExported)
             });
+
             const csvFields = [
-                'Id', 
-                'Title', 
-                'Description', 
-                'Content', 
-                'Anonymous Mode', 
-                'Email', 
-                'Full Name', 
-                'Topic',
-                'Category',
-                'Total Views', 
-                'Total Reaction']
+                {
+                    label: 'Idea ID',
+                    value: 'ideaId',
+                    default: ''
+                },
+                {
+                    label: 'Idea Title',
+                    value: 'title',
+                    default: ''
+                },
+                {
+                    label: 'Idea Description',
+                    value: 'ideaDescription',
+                    default: ''
+                },
+                {
+                    label: 'Idea Content',
+                    value: 'content',
+                    default: ''
+                },
+                {
+                    label: 'Email',
+                    value: 'email',
+                    default: ''
+                },
+                {
+                    label: 'Full Name',
+                    value: 'fullname',
+                    default: ''
+                },
+                {
+                    label: 'Role',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Category',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Department',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Submission Title',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Submission Description',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Closure Date',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Final Closure Date',
+                    value: '',
+                    default: ''
+                },
+                {
+                    label: 'Total View',
+                    value: '',
+                    default: ''
+                }
+            ]
                 
-            const csvParser = new CsvParser({ csvFields })
-            const csvData = csvParser.parse(csv)
-            res.setHeader("Content-Type", "text/csv")
-            res.setHeader("Content-Disposition", "attachment; filename=tutorials.csv")
-            res.status(200).end(csvData)
-                
+            exportCSV(res, {
+                header: csvFields,
+                data: csv
+            })
+            res.end()
         } catch (error) {
             res.status(500).json(error)
         }

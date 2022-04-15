@@ -24,24 +24,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% submissions.forEach((submission) => { %>
+                        <% if(typeof(submissions) !== 'undefined' && submissions.length > 0) { %> 
+                            <% submissions.forEach((submission) => { %>
+                                <tr>
+                                    <td><%= submission.name %></td>
+                                    <td><%= formatDateSubmission(submission.closure_date) %></td>
+                                    <td><%= formatDateSubmission(submission.final_closure_date) %></td>
+                                    <td><a style="color: rgb(243, 195, 64);" target="_blank" rel="noopener noreferrer" href="<% if(typeof(submission.folder) !== 'undefined') { %><%= submission.folder.folder_path %><% } %>"><i class="fa-brands fa-google-drive"></i></a></td>
+                                    <td>
+                                        <ul class="list-inline m-0">
+                                            <li class="list-inline-item">
+                                                <a class="btn btn-success btn-sm rounded-0" type="button" href="/submission-update/<%= submission._id %>" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <button class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-id="<%= submission._id %>" data-bs-target="#delete-submission-modal" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            <% }) %>     
+                        <% } else { %>          
                             <tr>
-                                <td><%= submission.name %></td>
-                                <td><%= formatDateSubmission(submission.closure_date) %></td>
-                                <td><%= formatDateSubmission(submission.final_closure_date) %></td>
-                                <td><a style="color: rgb(243, 195, 64);" target="_blank" rel="noopener noreferrer" href="<% if(typeof(submission.folder) !== 'undefined') { %><%= submission.folder.folder_path %><% } %>"><i class="fa-brands fa-google-drive"></i></a></td>
-                                <td>
-                                    <ul class="list-inline m-0">
-                                        <li class="list-inline-item">
-                                            <a class="btn btn-success btn-sm rounded-0" type="button" href="/submission-update/<%= submission._id %>" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-id="<%= submission._id %>" data-bs-target="#delete-submission-modal" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
-                                        </li>
-                                    </ul>
+                                <td colspan="5" style="text-align: center;">
+                                    <h5 style="font-weight: 700;">No Record</h5>
                                 </td>
                             </tr>
-                        <% }) %>               
+                        <% } %> 
                     </tbody>
                 </table>
             </div>

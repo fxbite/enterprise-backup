@@ -2,7 +2,7 @@ const Category = require('../models/Category')
 const Idea = require('../models/Idea')
 class CategoryController {
 
-    // [POST] /category/create
+    // [POST] /category
     async categoryCreate(req, res, next){
 
         try {
@@ -15,44 +15,35 @@ class CategoryController {
         }
     }
 
-    // [PUT] /category/update/:id
+    // [PATCH] /category/:id
     async categoryUpdate(req, res, next){
 
         try {
             const cateId = req.params.id
             const category = await Category.findById(cateId)
-            await category.updateOne({ $set: req.body})
+            await category.updateOne({ $set: req.body.name})
 
             const updatedCategory = await Category.findById(cateId)
-            res.status(200).json({
-                message: 'The category has been updated.',
-                category: updatedCategory
-            })
+            res.redirect('/category-management')
 
         } catch (error) {
             res.status(500).json(error)
         }
     }
 
-    // [DELETE] /category/delete/:id
+    // [DELETE] /category/:id
     async categoryDelete(req, res, next){
 
         try {
             const cateId = req.params.id
-            const idea = await Idea.find()
+            const category = await Idea.findById(cateId)
 
-            if (idea.length > 0){
-                res.status(200).json({
-                    message: "Category can't be deleted because it has already been used."
-                })
-
+            if (category.use !== ''){
+                return res.redirect('/category-management')
             } else {
                 const category = await Category.findById(cateId)
                 await category.deleteOne()
-                res.status(200).json({
-                    message: 'The category has been deleted.',
-                })
-
+                res.redirect('/category-management')
             }
 
         } catch (error) {

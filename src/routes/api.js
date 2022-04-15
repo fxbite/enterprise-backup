@@ -100,7 +100,8 @@ router.get('/react', requiredLogin, reactController.getAllReact)
 //~ Server rendering
 //TODO: Add requiredLogin & managerRole
 router.get('/category-management', renderController.crudCategory)
-router.post('/category', requiredLogin, managerRole, categoryController.categoryCreate)         //? Create a category
+router.post('/category', categoryController.categoryCreate)         //? Create a category
+router.get('/test', renderController.test)
 
 //~ For API
 router.route('/category/:id')
@@ -148,7 +149,11 @@ router.get('/icons', iconController.getAllIcon)        //? Get all icons
 
 
 //* Download CSV file
-router.get('/csv/download', requiredLogin, managerRole, downloadController.csvDownload)  //? Download csv
+router.get('/csv/download', downloadController.csvDownload)  //? Download csv
+
+
+//* Show report chart
+router.get('/report', renderController.chartData) 
 
 
 module.exports = router

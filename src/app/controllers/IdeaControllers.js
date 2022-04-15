@@ -17,16 +17,17 @@ class IdeaController {
             const newIdea = new Idea(req.body)
             const savedIdea = await newIdea.save()
 
-            // Get info user
-            const roleId = req.params.id
-            const user = await User.find({role_id: roleId })
             
-            // Get a topic
-            const submission = await Submission.findById(req.body.submission_id)
-            const nameTopic = submission[0].name
+            
+            // Get a name of submission
+            const submission = await Submission.findById(req.body.submission)
+            const nameTopic = submission.name
 
             // Send notification mail to coordinator
-            for (const element of user) {
+            const coordinatorId = '623ec63819af8a0d9cd33b6e'
+            const users = await User.find({role: coordinatorId})
+
+            for (const element of users) {
                 const fullName = element.fullname
                 const email = element.email
                 const topic = nameTopic

@@ -2,7 +2,8 @@ const {Schema, model} = require('mongoose')
 
 const CategorySchema = new Schema({
 
-    name: {type: String, required: true}
+    name: {type: String, required: true},
+    use: {type: String, default: ''}
 
 }, {timestamps: true}
 )

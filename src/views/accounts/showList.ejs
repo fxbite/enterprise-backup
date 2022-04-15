@@ -25,25 +25,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% users.forEach((user) => { %>
+                        <% if(typeof(users) !== 'undefined' && users.length > 0) { %> 
+                            <% users.forEach((user) => { %>
+                                <% if(user.role !== null && user.department !== null) { %> 
+                                    <tr>
+                                        <td><%= user.username %></td>
+                                        <td><%= user.email %></td>
+                                        <td><%= user.fullname %></td>
+                                        <td><%= user.role.name %></td>
+                                        <td><%= user.department.name %></td>
+                                        <td>
+                                            <ul class="list-inline m-0">
+                                                <li class="list-inline-item">
+                                                    <a class="btn btn-success btn-sm rounded-0" href="/user-update/<%= user._id %>" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <button class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-id="<%= user._id %>" data-bs-target="#delete-user-modal" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                <% } %> 
+                            <% }) %> 
+                        <% } else { %>
                             <tr>
-                                <td><%= user.username %></td>
-                                <td><%= user.email %></td>
-                                <td><%= user.fullname %></td>
-                                <td><%= user.role.name %></td>
-                                <td><%= user.department.name %></td>
-                                <td>
-                                    <ul class="list-inline m-0">
-                                        <li class="list-inline-item">
-                                            <a class="btn btn-success btn-sm rounded-0" href="/user-update/<%= user._id %>" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                                        </li>
-                                        <li class="list-inline-item">
-                                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-id="<%= user._id %>" data-bs-target="#delete-user-modal" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
-                                        </li>
-                                    </ul>
+                                <td colspan="6" style="text-align: center;">
+                                    <h5 style="font-weight: 700;">No Record</h5>
                                 </td>
                             </tr>
-                        <% }) %>               
+                        <% } %> 
                     </tbody>
                 </table>
             </div>
