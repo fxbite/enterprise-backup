@@ -3,7 +3,13 @@ const {Folder, User} = require('../app/models')
 const tz = require('moment-timezone')
 const mongoose = require('mongoose')
 
-const showDate = (req, res, next) => {
+const showData = (req, res, next) => {
+
+    //? Show Department Labels
+    res.locals.departLabels = String(req.session.departLabels)
+
+    //? Show Contributors
+    res.locals.contributors = String(req.session.contributors)
 
     //? Show login name
     res.locals.userName = req.session.userName
@@ -176,4 +182,4 @@ const showDate = (req, res, next) => {
     next()
 }
 
-module.exports = showDate
+module.exports = showData

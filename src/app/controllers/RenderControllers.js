@@ -96,6 +96,19 @@ class RenderControllers {
     // [GET] /report
     async chartData(req, res, next) {
         try {
+            const department = await Department.find()
+            const departLabels = department.map(obj => obj.name)
+            const departId = department.map(obj => String(obj._id))
+            
+            let contributors = []
+            for(const obj of departId) {
+                const users = await User.find({department: obj})
+                const numberContributors = users.length
+                contributors.push(numberContributors)
+            }
+
+            req.session.departLabels = departLabels
+            req.session.contributors = contributors
             res.status(200).render('report/index', {layout: 'layouts/dashboard'})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})

@@ -14,7 +14,7 @@ const exportCSV = (res, csvInfo) => {
   
     //? Export csv
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename=${moment(Date.now()).format('YYYY-MM-DD hhmmss')}.csv`);
+    res.setHeader('Content-Disposition', `attachment; filename=${moment(Date.now()).format('YYYY-MM-DD HHmmss')}.csv`);
     res.send(buffer);
   };
   
