@@ -49,7 +49,7 @@ router.get('/comments', requiredLogin, commentController.showAllComment)        
 
 //* Submission
 //~ Server rendering
-//TODO: Add requiredLogin && coordinatorRole 
+//TODO: Add requiredLogin & managerRole 
 router.get('/submission-management', renderController.crudSubmission)
 router.get('/submission-register', renderController.registerSubmission)
 router.get('/submission-update/:id', renderController.updateSubmission)
@@ -97,27 +97,41 @@ router.get('/react', requiredLogin, reactController.getAllReact)
 
 
 //* Category
+//~ Server rendering
+//TODO: Add requiredLogin & managerRole
+router.get('/category-management', renderController.crudCategory)
 router.post('/category', requiredLogin, managerRole, categoryController.categoryCreate)         //? Create a category
-router.put('/category/:id', requiredLogin, managerRole, categoryController.categoryUpdate)      //? Update a category
-router.delete('/category/:id', requiredLogin, managerRole, categoryController.categoryDelete)   //? Delete a category if category is never used
-router.get('/category/:id', requiredLogin, managerRole, categoryController.getACategory)        //? Get a category
-router.get('/categories', requiredLogin, managerRole, categoryController.getAllCategory)        //? Get all categories
+
+//~ For API
+router.route('/category/:id')
+    .put(categoryController.categoryUpdate)      //? Update a category
+    .delete(categoryController.categoryDelete)   //? Delete a category if category is never used
+    .get(categoryController.getACategory)        //? Get a category
+router.get('/categories', categoryController.getAllCategory)        //? Get all categories
 
 
 //* Role
+//~ For API
 router.post('/role', roleController.createRole)         //? Create a role
-router.put('/role/:id', requiredLogin, roleController.updateRole)      //? Update a role
-router.delete('/role/:id', roleController.deleteRole)   //? Delete a role
-router.get('/role/:id', requiredLogin, roleController.getARole)        //? Get a role
+    .route('/role/:id')
+    .put(roleController.updateRole)      //? Update a role
+    .delete(roleController.deleteRole)   //? Delete a role
+    .get(roleController.getARole)        //? Get a role
 router.get('/roles', roleController.getAllRole)         //? Get all roles
 
 
 //* Department
-router.post('/department', requiredLogin, coordinatorRole, departmentController.createDepart)          //? Create a department
-router.put('/department/:id', requiredLogin, coordinatorRole, departmentController.updateDepart)       //? Update a department
-router.delete('/department/:id', requiredLogin, coordinatorRole, departmentController.deleteDepart)    //? Delete a department
-router.get('/department/:id', requiredLogin, coordinatorRole, departmentController.getADepart)         //? Get a department
-router.get('/departments', requiredLogin, coordinatorRole, departmentController.getAllDepart)           //? Get all departments
+//~ Server rendering
+//TODO: Add requiredLogin & coordinatorRole
+router.get('/department-management', renderController.crudDepartment)
+router.post('/department', departmentController.createDepart)          //? Create a department
+
+//~ For API
+router.route('/department/:id')
+    .put(departmentController.updateDepart)       //? Update a department
+    .delete(departmentController.deleteDepart)    //? Delete a department
+    .get(departmentController.getADepart)         //? Get a department
+router.get('/departments', departmentController.getAllDepart)           //? Get all departments
 
 
 //* Folder

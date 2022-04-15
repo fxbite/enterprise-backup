@@ -39,7 +39,7 @@ class CategoryController {
 
         try {
             const cateId = req.params.id
-            const idea = await Idea.find({ category_id: cateId})
+            const idea = await Idea.find()
 
             if (idea.length > 0){
                 res.status(200).json({

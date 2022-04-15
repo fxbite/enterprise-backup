@@ -1,19 +1,11 @@
 <div class="row g-5">
     <div class="col-md-11 col-lg-12">
-        <div class="row g-3 justify-content-center">
-
-            <!-- Pagination using helper  -->
-            <% if(typeof(users) !== 'undefined') { %> 
-                <%- pagination(current, pages) %> 
-            <% } %> 
-
-        </div>
         <div class="row g-3" style="margin-top: 1%; margin-bottom: 15px;">
-            <div class="col-sm-2">
-                <a class="w-100 btn btn-info btn-rounded btn-lg" href="/new-user" id="btn-create-user">New</a>
+            <div class="col-sm-3">
+                <button class="w-100 btn btn-info btn-rounded btn-lg" data-bs-toggle="modal" data-bs-target="#createDepartment" id="btn-create-department">New</button>
             </div>
         </div>
-        <div class="row g-3" style="padding: 0 25px; padding-top: 2px;">
+        <div class="row g-3" style="padding: 0 5px;">
             <div id="tableFixHead">
                 <table class="table-hover">
                     <thead>
@@ -29,10 +21,10 @@
                                 <td>
                                     <ul class="list-inline m-0">
                                         <li class="list-inline-item">
-                                            <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-success btn-sm rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#updateDepartment" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
                                         </li>
                                         <li class="list-inline-item">
-                                            <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm rounded-0"  type="button" data-bs-toggle="modal" data-bs-target="#delete-department-modal" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
                                         </li>
                                     </ul>
                                 </td>
@@ -44,5 +36,64 @@
         </div>
     </div>
 </div>
+
+<!-- Create Department Modal -->
+<div class="modal fade" id="createDepartment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create Department</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/department" method="post">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Department Name</label>
+                  <input type="text" class="form-control" id="nameDepartment" name="name">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
 </div>
+
+<!-- Update Department Modal -->
+<div class="modal fade" id="updateDepartment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Department</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Confirm Delete Department -->
+<div id="delete-department-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Do you confirm to remove this department?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+              <button id="btn-delete-user" type="button" class="btn btn-danger">OK</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
 <link rel="stylesheet" href="/css/table.css">

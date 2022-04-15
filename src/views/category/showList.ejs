@@ -18,8 +18,9 @@
                 <table class="table-hover">
                     <thead>
                         <tr>
-                        <th width="30%">Name</th>
-                        <th width="30%">Status</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Remove</th>
                         <th>Action</th>
                         </tr>
                     </thead>
@@ -28,12 +29,11 @@
                             <tr>
                                 <td><%= category.name %></td>
                                 <% if(typeof(status) !== 'undefined') { %> 
-                                    <span style="color: green;">•</span>
-                                    <td>Active</td>
+                                    <td><span style="color: green; font-size: larger;">•</span> Active</td> 
                                 <% } else { %>
-                                    <span style="color: red;">•</span>
-                                    <td>Inactive</td> 
+                                    <td><span style="color: red; font-size: larger;">•</span>  Inactive</td> 
                                 <% } %> 
+                                
                                 <td>
                                     <ul class="list-inline m-0">
                                         <li class="list-inline-item">

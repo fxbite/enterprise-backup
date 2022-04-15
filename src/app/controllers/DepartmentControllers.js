@@ -8,7 +8,7 @@ class DepartmentController {
         try {
             const newDepart = new Department(req.body)
             const savedDepart = await newDepart.save()
-            res.status(200).json(savedDepart)
+            res.redirect('/department-management')
 
         } catch (error) {
             res.status(500).json(error)
@@ -23,10 +23,7 @@ class DepartmentController {
             const depart = await Department.findById(departId)
             await depart.updateOne({ $set: req.body})
             const updatedDepart = await Department.findById(departId)
-            res.status(200).json({
-                message: "The department has been updated.",
-                department: updatedDepart
-            })
+            res.redirect('/department-management')
 
         } catch (error) {
             res.status(500).json(error)
@@ -39,9 +36,7 @@ class DepartmentController {
         try {
             const depart = await Department.findById(req.params.id)
             await depart.deleteOne()
-            res.status(200).json({
-                message: 'The department has been deleted.'
-            })
+            res.redirect('/department-management')
 
         } catch (error) {
             res.status(500).json(error)

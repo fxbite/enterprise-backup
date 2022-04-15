@@ -56,7 +56,26 @@ class RenderControllers {
     // [GET] /category-management
     async crudCategory(req, res, next) {
         try {
-            res.status(200).render('category/showList', {layout: 'layouts/dashboard'})
+            const categories = await Category.find()
+            res.status(200).render('category/showList', {layout: 'layouts/dashboard', categories})
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
+    // [GET] /department-register
+    async registerDepartment(req, res, next) {
+        try {
+            res.status(200).render('department/register', {layout: 'layouts/forum'})
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
+    // [GET] /department-update
+    async updateDepartment(req, res, next) {
+        try {
+            res.status(200).render('department/update', {layout: 'layouts/forum'})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -65,7 +84,8 @@ class RenderControllers {
     // [GET] /department-management
     async crudDepartment(req, res, next) {
         try {
-            res.status(200).render('department/showList', {layout: 'layouts/dashboard'})
+            const departments = await Department.find()
+            res.status(200).render('department/showList', {layout: 'layouts/forum', departments})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
