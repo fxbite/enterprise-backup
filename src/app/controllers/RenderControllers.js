@@ -148,8 +148,9 @@ class RenderControllers {
     // [GET] /idea-register
     async registerIdea(req, res, next) {
         try {
+            const submissions = await Submission.find()
             const categories = await Category.find()
-            res.status(200).render('idea/register', {layout: 'layouts/forum', categories})
+            res.status(200).render('idea/register', {layout: 'layouts/forum', categories, submissions})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }

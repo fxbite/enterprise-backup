@@ -110,3 +110,27 @@
     </div>
 </div>
 <!-- /Forum Detail -->
+
+<!-- Create Category Modal -->
+<div class="modal fade" id="makeComment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Make Comment on Idea </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/category" method="post">
+                <div class="mb-3">
+                  <!-- <label for="exampleInputEmail1" class="form-label">Category Name</label> -->
+                  <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i><span style="margin-left: 5px;">Send</span></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
