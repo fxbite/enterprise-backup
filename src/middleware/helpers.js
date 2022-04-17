@@ -14,6 +14,9 @@ const showData = (req, res, next) => {
     //? Show login name
     res.locals.userName = req.session.userName
 
+    //? Show login userId
+    res.locals.userLoginId = String(req.session.userId)
+
     //? Format time and timezone for submission
     res.locals.formatDateSubmission = (value, format = 'LLLL', tz = 'Asia/Ho_Chi_Minh') => {
 

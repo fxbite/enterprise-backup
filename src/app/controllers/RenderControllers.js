@@ -119,7 +119,8 @@ class RenderControllers {
     // [GET] /all-submissions
     async showForum(req, res, next) {
         try {
-            res.status(200).render('forum/showSubmission', {layout: 'layouts/forum'})
+            const submissions = await Submission.find().populate('user')
+            res.status(200).render('forum/showSubmission', {layout: 'layouts/forum', submissions})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -129,7 +130,8 @@ class RenderControllers {
     // [GET] /all-ideas
     async showAllIdeas(req, res, next) {
         try {
-            res.status(200).render('forum/ideas', {layout: 'layouts/forum'})
+            const ideas = await Idea.find()
+            res.status(200).render('forum/ideas', {layout: 'layouts/forum', ideas})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -156,13 +158,23 @@ class RenderControllers {
         }
     }
 
+    // [GET] /idea-management
+    async crudIdea(req, res, next) {
+        try {
+            const ideas = await Idea.find()
+            res.status(200).render('idea/showList', {layout: 'layouts/forum', ideas})
+        } catch (error) {
+            res.status(500).render('status/500', {layout: false})
+        }
+    }
+
     //TODO
     // [GET] /idea-update/:id
     async updateIdea(req, res, next) {
         try {
             const ideaId = req.params.id
             const ideas = await Idea.findById(ideaId)
-            res.status(200).render('idea/update', {layout: 'layouts/forum', ideas})
+            res.status(200).render('idea/detail', {layout: 'layouts/forum'})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -244,7 +256,6 @@ class RenderControllers {
             res.status(500).json(error)
         }
     }
-
 }
 
 module.exports = new RenderControllers

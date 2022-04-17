@@ -8,37 +8,18 @@ class CommentController {
     async createComment(req, res, next){
 
         try {
-            const commentId = re.body.comment_id
-            const ideaId = req.body.idea_id 
-            const replyMode = req.body.replierMode
+            const ideaId = req.body.idea
             const newComment = await Comment(req.body)
             const savedComment = await newComment.save()
 
-            //? Check commentMode
-            if(replyMode === false) {
-                //? Get info author of idea
-                const idea = await Idea.findById(ideaId)
-                const authorId = idea[0].user_id
-                const infoAuthor = await User.findById(authorId)
-                const emailAuthor = infoAuthor[0].email
-                const fullNameAuthor = infoAuthor[0].fullname 
-    
-                //? Send email notification to author of idea
-                await notificationMail(emailAuthor, fullNameAuthor, 'idea')
+            const idea = await Idea.findById(ideaId).populate('user')
+            const emailAuthor = idea.email
+            const fullNameAuthor = idea.fullname
 
-            } else {
-                //? Get info author of idea
-                const mainComment = await Comment.findById(commentId)
-                const userId = mainComment[0].user_id
-                const infoAuthor = await User.findById(userId)
-                const emailAuthor = infoAuthor[0].email
-                const fullNameAuthor = infoAuthor[0].fullname 
+            //? Send email notification to author of idea
+            await notificationMail(emailAuthor, fullNameAuthor, 'idea')
 
-                //? Send email notification to user
-                await notificationMail(emailAuthor, fullNameAuthor, 'reply')
-            }
-
-            res.status(200).json(savedComment)
+            res.redirect(`/idea/${ideaId}/detail`)
 
         } catch (error) {
             res.status(500).json(error)
@@ -49,21 +30,23 @@ class CommentController {
     async updateComment(req, res, next){
 
         try {
+            const userLoginId = req.session.userId
+
             const id = req.params.id
-            const comment = await Comment.findById(id)
-            
-            await comment.updateOne({
-                $set: {
-                    content: req.body.content,
-                    anonymousMode: req.body.anonymousMode
-                }
-            })
-            
-            const updateComment = await Comment.findById(id)
-            res.status(200).json({
-                message: 'The comment has been updated.',
-                comment: updateComment
-            })
+            const comment = await Comment.findById(id).populate('user')
+            const userId = comment.user._id
+            const ideaId = String(comment.idea)
+
+            if(userLoginId === String(userId)) {
+                await comment.updateOne({
+                    $set: {
+                        content: req.body.content,
+                        anonymousMode: req.body.anonymousMode
+                    }
+                })
+                return res.redirect(`/idea/${ideaId}/detail`)
+            }
+            res.redirect(`/idea/${ideaId}/detail`)
 
         } catch (error) {
             res.status(500).json(error)
@@ -74,14 +57,19 @@ class CommentController {
     async deleteComment(req, res, next){
 
         try {
+            const userLoginId = req.session.userId
+
             const id = req.params.id
             const comment = await Comment.findById(id)
+            const userId = comment.user._id
+            const ideaId = String(comment.idea)
             
-            await comment.updateOne()
-            res.status(200).json({
-                message: 'The comment has been deleted.'
-            })
-
+            if(userLoginId === userId) {
+                await comment.deleteOne()
+                return res.redirect(`/idea/${ideaId}/detail`)
+            }
+            res.redirect(`/idea/${ideaId}/detail`)
+            
         } catch (error) {
             res.status(500).json(error)
         }

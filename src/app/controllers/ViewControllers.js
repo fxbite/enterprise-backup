@@ -7,15 +7,14 @@ class ViewController {
     async createNewView(req, res, next) {
 
         try {
-            const userId = req.body.user_id
-            const ideaId = req.body.idea_id
+            const ideaId = req.body.idea
 
             // Create a new view
             const newView = new View(req.body)
             const savedView = await newView.save()
 
             // Count total view 
-            const views = await View.find({user_id: userId})
+            const views = await View.find({idea: ideaId})
             const countViews = views.length
 
             // Update total_view in idea collection 

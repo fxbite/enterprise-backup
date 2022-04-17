@@ -26,8 +26,9 @@ const {validateRequest} = require('../middleware/handlerError')
 //* Idea
 //~ Server rendering
 router.get('/idea-register', renderController.registerIdea)
-router.get('/idea-update/:id', renderController.updateIdea)
-router.get('/all-ideas', renderController.showAllIdeas)
+router.get('/idea-detail/:id', renderController.updateIdea)
+router.get('/idea-management', renderController.crudIdea)
+router.get('/all-ideas/:id', renderController.showAllIdeas)
 router.get('/all-submissions', renderController.showForum)
 router.get('/idea/detail', renderController.showDetailIdea)
 
@@ -64,7 +65,8 @@ router.get('/submissions', submissionController.getAllSubmission)
 
 
 //* View
-router.post('/view', requiredLogin, viewController.createNewView)    //? Create a new viewer & count total views & update total_view in Idea Collection
+//TODO: Add requiredLogin
+router.post('/view', viewController.createNewView)    //? Create a new viewer & count total views & update total_view in Idea Collection
 
 
 //* File
@@ -87,7 +89,7 @@ router.route('/user/:id')
     .patch(userController.updateUser)    //? Using with server rending
     .delete(userController.deleteUser)   //? Using with server rending
     .get(userController.getAUser)
-router.get('/users', userController.getAllUser)
+router.get('/users', userController.getAllUser) // ~ Test
 
 
 //* Reaction

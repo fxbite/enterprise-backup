@@ -1,79 +1,32 @@
 <h2>Submission</h2>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3" style="margin-top: 1%;">
-    <% if(typeof(submissions) !== 'undefined') { %><% submissions.forEach(submission => { %><% }) %><% } %>  
-    <div class="col">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5>gdfgdfg</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 4px">
-                    <div class="btn-group" style="margin-right: 4px;">
-                        <span>By <span style="color: rgb(243, 182, 67);"> fsdfsdfsd dsadsadsa adsadsadas</span></span>
+    <% if(typeof(submissions) !== 'undefined') { %>
+        <% submissions.forEach(submission => { %>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 style="font-weight: 700; color: rgb(19, 202, 172);"><%= submission.name %> </h5>
+                        <p class="card-text">
+                           <%- submission.description %> 
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 4px">
+                            <div class="btn-group" style="margin-right: 4px;">
+                                <span>By <span style="color: rgb(243, 182, 67);"><%= submission.user.fullname %></span></span>
+                            </div>
+                        </div>
+                        <i style="color: rgb(121, 121, 121)" class="fa-solid fa-stopwatch"></i>
+                        <small class="text-muted">
+                            <% if(submission.closure_date > Date.now()) { %>
+                                <%= formatDateSubmission(submission.closure_date, 'MMMM Do YYYY, h:mm:ss A') %>
+                            <% } else { %>
+                                <%= formatDateSubmission(submission.final_closure_date, 'MMMM Do YYYY, h:mm:ss A') %> 
+                            <% } %>     
+                        </small>
+                        <a href="/all-ideas/<%= submission._id %>" class="stretched-link"></a>
                     </div>
-                   
-                    <% if(typeof(closure_date) !== 'undefined') { %><% } %>  
-                    <% if(typeof(final_closure_date) !== 'undefined') { %><% } %>  
-                </div>
-                <i style="color: rgb(121, 121, 121)" class="fa-solid fa-stopwatch"></i>   <small class="text-muted">9 mins</small>
-                <a href="#" class="stretched-link"></a>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5>gdfgdfg</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                    <!-- <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button> -->
-                    <span>By</span>&nbsp<span style="color: rgb(243, 182, 67);"> fsdfsdfsd</span>
-                    </div>
-                    <% if(typeof(closure_date) !== 'undefined') { %><% } %>  
-                    <% if(typeof(final_closure_date) !== 'undefined') { %><% } %>  
-                </div>
-                <small class="text-muted">9 mins</small>
-            </div>
-        </div>
-    </div>
-   
-    <div class="col">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5>gdfgdfg</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                    <!-- <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button> -->
-                    <span>By</span>&nbsp<span style="color: rgb(243, 182, 67);"> fsdfsdfsd</span>
-                    </div>
-                    <% if(typeof(closure_date) !== 'undefined') { %><% } %>  
-                    <% if(typeof(final_closure_date) !== 'undefined') { %><% } %>  
-                    <small class="text-muted">9 mins</small>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="col">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5>gdfgdfg</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                    <!-- <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button> -->
-                    <span>By</span>&nbsp<span style="color: rgb(243, 182, 67);"> fsdfsdfsd</span>
-                    </div>
-                    <% if(typeof(closure_date) !== 'undefined') { %><% } %>  
-                    <% if(typeof(final_closure_date) !== 'undefined') { %><% } %>  
-                    <small class="text-muted">9 mins</small>
-                </div>
-            </div>
-        </div>
-    </div>
+        <% }) %>
+    <% } %>  
 </div>
 

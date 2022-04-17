@@ -56,6 +56,7 @@ class UserController {
                 req.session.logged = true
                 req.session.role = user['role_id']['_id']
                 req.session.userName = user.fullname
+                req.session.userId = user._id
                 return res.redirect('/')
             } else {
                 req.flash()

@@ -1,26 +1,71 @@
-
-const Idea = require('../models/Idea')
-const View = require('../models/View')
-const React = require('../models/Reaction')
-const User = require('../models/User')
-const Submission = require('../models/Submission')
+const {Idea, File, Submission, User, Folder, Category} = require('../models')
 const paginatedResults = require('../../util/paginated')
 const notificationMail = require('../../util/mail')
-
+const googleDrive = require('../../util/drive')
+const stream = require('stream')
 class IdeaController {
 
     // [POST] /idea/:id/role
     async createIdea(req, res, next){
-
+        const session = await Submission.startSession();
+        session.startTransaction();
         try {
-            // Create a new idea
+            // Receive idea data
             const newIdea = new Idea(req.body)
-            const savedIdea = await newIdea.save()
+            const submissionId = req.body.submission
+            const arrayCategories = req.body.category
+            const savedIdea = await newIdea.save({session: session})
+            const ideaId = savedIdea._id
 
-            
+            // Tracking category tag using and update use field
+            const categories = await Category.find().select('_id')
+            for(const element of categories) {
+                const cateId = String(element._id)
+                if(_.includes(arrayCategories, cateId) === true) {
+                    const category = await Category.findById(cateId)
+                    if(category.use === '') {
+                        await Category.findByIdAndUpdate(cateId, {use: '1'}, {session: session})
+                    } else {
+                        let useNumber = parseInt(category.use)
+                        const updateUseNumber = useNumber + 1
+                        await Category.findByIdAndUpdate(cateId, {use: updateUseNumber}, {session: session})
+                    }
+                }
+            }
+
+            // Receive idea file
+            const fileName = req.file.originalname
+            const typeFile = req.file.mimetype
+            const fileObj = req.file
+
+            // Buffer file
+            const bufferStream = await new stream.PassThrough()
+            const fileBuffer = await bufferStream.end(fileObj.buffer)
+
+            // Get info of folder id Google Drive
+            const folder = await Folder.findOne({submission: submissionId})
+            const folderIdDrive = folder.folder_id_drive
+            const folderId = folder._id
+
+            // Upload file to Google Drive
+            const uploadResult = await googleDrive.uploadFile(fileBuffer, typeFile, folderIdDrive, fileName)
+            const fileId = uploadResult.id
+
+            // Generate public URL for file
+            const generateResult = await googleDrive.generatePublicUrl(fileId)
+            const publicPath = generateResult.webViewLink
+
+            // Save all info data into db
+            const newFile = new File({
+                file_id_drive: fileId,
+                file_path: publicPath,
+                idea: ideaId,
+                folder: folderId
+            }) 
+            const savedFile = await newFile.save({session: session})
             
             // Get a name of submission
-            const submission = await Submission.findById(req.body.submission)
+            const submission = await Submission.findById(submissionId)
             const nameTopic = submission.name
 
             // Send notification mail to coordinator
@@ -33,10 +78,12 @@ class IdeaController {
                 const topic = nameTopic
                 await notificationMail(fullName, email, 'coordinator', topic)
             }
-
-            res.status(200).json(savedIdea)
+            await session.commitTransaction();
+            session.endSession();
+            return res.redirect('/idea-management')
 
         } catch (error) {
+            await session.abortTransaction();
             res.status(500).json(error)
         }
     }
