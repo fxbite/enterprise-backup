@@ -141,7 +141,10 @@ class RenderControllers {
     // [GET] /idea/:id/detail
     async showDetailIdea(req, res, next) {
         try {
-            res.status(200).render('forum/ideaDetail', {layout: 'layouts/forum'})
+            const ideaId = req.params.id
+            const idea = await Idea.findById(ideaId)
+            const comments = await Comment.find({idea: ideaId}).populate('user')
+            res.status(200).render('forum/ideaDetail', {layout: 'layouts/forum', idea, comments})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }

@@ -21,7 +21,7 @@ class CategoryController {
         try {
             const cateId = req.params.id
             const category = await Category.findById(cateId)
-            await category.updateOne({ $set: req.body.name})
+            await category.updateOne({ $set: req.body})
 
             const updatedCategory = await Category.findById(cateId)
             res.redirect('/category-management')
@@ -36,14 +36,14 @@ class CategoryController {
 
         try {
             const cateId = req.params.id
-            const category = await Idea.findById(cateId)
+            const category = await Category.findById(cateId)
 
             if (category.use !== ''){
                 return res.redirect('/category-management')
             } else {
                 const category = await Category.findById(cateId)
                 await category.deleteOne()
-                res.redirect('/category-management')
+                return res.redirect('/category-management')
             }
 
         } catch (error) {
