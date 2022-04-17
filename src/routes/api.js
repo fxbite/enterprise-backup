@@ -30,7 +30,7 @@ router.get('/idea-detail/:id', renderController.updateIdea)
 router.get('/idea-management', renderController.crudIdea)
 router.get('/all-ideas/:id', renderController.showAllIdeas)
 router.get('/all-submissions', renderController.showForum)
-router.get('/idea/detail', renderController.showDetailIdea)
+router.get('/idea/:id/detail', renderController.showDetailIdea)
 
 //~ For API
 router.post('/idea/:id/role', requiredLogin, ideaController.createIdea) //? Create a idea

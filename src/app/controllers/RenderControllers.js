@@ -1,4 +1,4 @@
-const {User, Role, Department, Submission, Category, Idea} = require('../models')
+const {User, Role, Department, Submission, Category, Idea, Comment} = require('../models')
 const _ = require('lodash')
 class RenderControllers {
 

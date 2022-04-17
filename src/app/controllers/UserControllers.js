@@ -42,8 +42,9 @@ class UserController {
     async authLogin(req, res, next) {
 
         try {
+            
             const {username, password} = req.body
-            const user = await User.findOne({username: username}).populate('role_id')
+            const user = await User.findOne({username: username}).populate('role')
             
             if(!user) {
                 return res.status(401).json('Username or password is incorrect') 
@@ -53,13 +54,37 @@ class UserController {
             const check = bcrypt.compareSync(password, hashedPassword)
             
             if(check) {
-                req.session.logged = true
-                req.session.role = user['role_id']['_id']
-                req.session.userName = user.fullname
-                req.session.userId = user._id
-                return res.redirect('/')
+                const role = String(user.role._id)
+
+                // Manager vs Administrator
+                if(role === '623ec6b919af8a0d9cd33b74' || role === '623ec78019af8a0d9cd33b7e') {
+                    req.session.logged = true
+                    req.session.role = 0
+                    req.session.userName = user.fullname
+                    req.session.userId = String(user._id)
+                    return res.redirect('/report')
+                }
+
+                // Coordinator
+                if(role === '623ec63819af8a0d9cd33b6e') {
+                    req.session.logged = true
+                    req.session.role = 1
+                    req.session.userName = user.fullname
+                    req.session.userId = String(user._id)
+                    return res.redirect('/all-submissions')
+                }
+
+                // Staff
+                if(role === '623ec65219af8a0d9cd33b70'){
+                    req.session.logged = true
+                    req.session.role = 2
+                    req.session.userName = String(user.fullname)
+                    req.session.userId = user._id
+                    return res.redirect('/all-submissions')
+                }
+
             } else {
-                req.flash()
+                
                 return res.redirect('/login')
             }
         } catch (error) {
@@ -75,7 +100,7 @@ class UserController {
               res.status(400).json('Unable to log out');
             }
             res.clearCookie('sid')
-            res.status(200).json('Logout Successfully')
+            res.redirect('/login')
           });
         } else {
           res.end();
