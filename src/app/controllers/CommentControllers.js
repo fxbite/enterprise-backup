@@ -1,6 +1,7 @@
 const Comment = require('../models/Comment')
 const Idea = require('../models/Idea')
 const User = require('../models/User')
+const {Types} = require('mongoose')
 const notificationMail = require('../../util/mail')
 class CommentController {
 
@@ -11,13 +12,13 @@ class CommentController {
             const ideaId = req.body.idea
             const newComment = await Comment(req.body)
             const savedComment = await newComment.save()
-
+            
             const idea = await Idea.findById(ideaId).populate('user')
-            const emailAuthor = idea.email
-            const fullNameAuthor = idea.fullname
+            const emailAuthor = idea.user.email
+            const fullNameAuthor = idea.user.fullname
 
             //? Send email notification to author of idea
-            await notificationMail(emailAuthor, fullNameAuthor, 'idea')
+            await notificationMail(fullNameAuthor, emailAuthor, 'idea')
 
             res.redirect(`/idea/${ideaId}/detail`)
 
@@ -33,11 +34,11 @@ class CommentController {
             const userLoginId = req.session.userId
 
             const id = req.params.id
-            const comment = await Comment.findById(id).populate('user')
-            const userId = comment.user._id
+            const comment = await Comment.findById(id)
+            const userId = String(comment.user)
             const ideaId = String(comment.idea)
 
-            if(userLoginId === String(userId)) {
+            if(userLoginId === userId) {
                 await comment.updateOne({
                     $set: {
                         content: req.body.content,
@@ -61,7 +62,7 @@ class CommentController {
 
             const id = req.params.id
             const comment = await Comment.findById(id)
-            const userId = comment.user._id
+            const userId = String(comment.user)
             const ideaId = String(comment.idea)
             
             if(userLoginId === userId) {

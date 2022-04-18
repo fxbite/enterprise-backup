@@ -4,7 +4,7 @@ const requiredLogin = (req, res, next) => {
         if (req.session.logged) {
             next();
           } else {
-            return res.status(401).json('Required Login')
+            return res.redirect('/login')
           }      
     } catch (error) {
         res.status(500).json(error)

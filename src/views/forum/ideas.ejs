@@ -3,7 +3,7 @@
         <div class="row g-3 justify-content-center">
             <!-- Pagination using helper  -->
             <% if(typeof(current) !== 'undefined' && typeof(pages) !== 'undefined') { %> 
-                <%- pagination(current, pages, '/submission-management') %> 
+                <%- pagination(current, pages, `/all-ideas/${submissionId}`) %> 
             <% } %> 
         </div>
     </div>
@@ -34,10 +34,10 @@
                         <div class="card mb-2">
                             <div class="card-body p-2 p-sm-3">
                                 <div class="media forum-item">
-                                    <a href="#" data-toggle="collapse" data-target=".forum-content"><img src="https://bootdey.com/img/Content/avatar/avatar<%= index + 1 %>.png" class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                    <a href="#" data-toggle="collapse" data-target=".forum-content"><img src="/img/main/undraw_profile_2.svg" class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                     <div class="media-body">
                                         <h6>
-                                        <a data-toggle="collapse" id="idea-detail-<%= idea._id %>" style="font-weight: 700; color: orange" data-target=".forum-content" class="text-body">
+                                        <a data-toggle="collapse" id="idea-detail-<%= idea._id %>" type="button" style="font-weight: 700; color: orange" data-target=".forum-content" class="text-body">
                                                 <%= idea.title %> 
                                             </a>
                                         </h6>
@@ -55,11 +55,11 @@
                             </div>
                         </div>
                         <script>
-                            const element = document.getElementById("idea-detail-<%= idea._id %>");
+                            var element = document.getElementById("idea-detail-<%= idea._id %>");
                             element.addEventListener("click", clickFunction);
 
                             function clickFunction() {
-                                var user = '624058afbce4469098ca4ba4'
+                                var user = "<%= userLoginId %>"
                                 var idea = "<%= idea._id %>"
                                 console.log(user);
                                 console.log(idea);

@@ -25,6 +25,9 @@ async function notificationMail(fullname, email, option, topic) {
                 clientSecret: CLIENT_SECRET,
                 refreshToken: REFRESH_TOKEN,
                 accessToken: accessToken
+            },
+            tls: {
+                rejectUnauthorized: false
             }
         })
 

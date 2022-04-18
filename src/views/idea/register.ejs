@@ -1,7 +1,7 @@
 <div class="row g-5">
     <div class="col-md-11 col-lg-12">
         <h4 class="mb-3">Create Idea</h4>
-        <form class="register-account" action="/register" method="post" style="margin-top: 2%; margin-bottom: 3%;">
+        <form class="register-account" action="/idea" method="post" enctype="multipart/form-data" style="margin-top: 2%; margin-bottom: 3%;">
             <div class="row g-3">
             <div class="col-sm-6">
                 <label for="firstName" class="form-label">Title</label>
@@ -27,7 +27,7 @@
             <div class="col-sm-6">
                 <label for="lastName" class="form-label">Anonymous Mode</label>
                 <select class="form-select" aria-label="Default select example" name="anonymousMode">
-                    <option value="" selected="" disabled=""></option>
+                    <option value="false" selected disabled="">Disable</option>
                     <option value="true">Enable</option> 
                 </select>
                 <div class="invalid-feedback">
@@ -36,7 +36,7 @@
 
             <div class="col-sm-6">
                 <label for="username" class="form-label">Category</label>
-                <select multiple class="chosen-select form-select" name="category[]">
+                <select multiple class="chosen-select form-select" name="category">
                     <option value="" selected="" disabled=""></option>
                     <% if(typeof(categories) !== 'undefined') { %>
                         <% categories.forEach(value => { %> 
@@ -71,6 +71,7 @@
                   Term and Condition
                 </label>
             </div>
+            <input type="hidden" value="<%= userLoginId %>" name="user">
             <hr class="my-4">
             <div class="col-md-3">
                 <button class="w-100 btn btn-success btn-lg" type="submit" style="font-weight: 700;">New Idea</button>

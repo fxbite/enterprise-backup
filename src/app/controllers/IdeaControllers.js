@@ -1,21 +1,32 @@
-const {Idea, File, Submission, User, Folder, Category} = require('../models')
+const {Idea, File, Submission, User, Folder, Category, View} = require('../models')
 const paginatedResults = require('../../util/paginated')
 const notificationMail = require('../../util/mail')
 const googleDrive = require('../../util/drive')
 const stream = require('stream')
+const _ = require('lodash')
+const {} = require('../../util/drive')
 class IdeaController {
 
-    // [POST] /idea/:id/role
+    // [POST] /idea
     async createIdea(req, res, next){
         const session = await Submission.startSession();
         session.startTransaction();
         try {
             // Receive idea data
+            const fileName = req.file.originalname
+            const typeFile = req.file.mimetype
+            const fileObj = req.file
+        
             const newIdea = new Idea(req.body)
             const submissionId = req.body.submission
             const arrayCategories = req.body.category
             const savedIdea = await newIdea.save({session: session})
             const ideaId = savedIdea._id
+
+            // Receive idea file
+            // Buffer file
+            const bufferStream = await new stream.PassThrough()
+            const fileBuffer = await bufferStream.end(fileObj.buffer)
 
             // Tracking category tag using and update use field
             const categories = await Category.find().select('_id')
@@ -33,14 +44,6 @@ class IdeaController {
                 }
             }
 
-            // Receive idea file
-            const fileName = req.file.originalname
-            const typeFile = req.file.mimetype
-            const fileObj = req.file
-
-            // Buffer file
-            const bufferStream = await new stream.PassThrough()
-            const fileBuffer = await bufferStream.end(fileObj.buffer)
 
             // Get info of folder id Google Drive
             const folder = await Folder.findOne({submission: submissionId})
@@ -53,12 +56,13 @@ class IdeaController {
 
             // Generate public URL for file
             const generateResult = await googleDrive.generatePublicUrl(fileId)
-            const publicPath = generateResult.webViewLink
+            const publicPath = generateResult.webContentLink
 
             // Save all info data into db
             const newFile = new File({
                 file_id_drive: fileId,
                 file_path: publicPath,
+                file_name: fileName,
                 idea: ideaId,
                 folder: folderId
             }) 
@@ -88,7 +92,7 @@ class IdeaController {
         }
     }
 
-    // [PATCH] /idea/:id
+    // [PATCH] /idea-detail/:id
     async updateIdea(req, res, next){
 
         try {
@@ -102,14 +106,12 @@ class IdeaController {
                     description: req.body.description,
                     content: req.body.content,
                     anonymousMode: req.body.anonymousMode,
-                    category_id: req.body.category_id
+                    category: req.body.category
+
                 }
             })
             const updatedIdea = await Idea.findById(id)
-            res.status(200).json({
-                message: 'The idea has been updated.',
-                idea: updatedIdea
-            })
+            re.redirect('back')
 
         } catch (error) {
             res.status(500).json(error)
@@ -119,27 +121,31 @@ class IdeaController {
 
     // [DELETE] /idea/:id
     async deleteIdea(req, res, next){
-
+        const session = await Submission.startSession();
+        session.startTransaction(); 
         try {
 
             // Delete a idea
             const id = req.params.id
             const idea = await Idea.findById(id)
-    
-            await idea.deleteOne()
+            const file = await File.findOne({idea: id})
+            const fileDrive = file.file_id_drive
+            await file.deleteOne({session: session})
+            await idea.deleteOne({session: session})
 
             // Delete all views of idea
-            await View.deleteMany({idea_id: id})
+            await View.deleteMany({idea: id}, {session: session})
 
             // Delete all reaction of idea
-            await React.deleteMany({idea_id: id})
+            // await React.deleteMany({idea_id: id})
 
-            res.status(200).json({
-                message: 'The idea has been deleted.',
-                updated: 'All views in this idea have been deleted.'
-            })
+            await googleDrive.deleteFile(fileDrive)
+            await session.commitTransaction();
+            session.endSession();
+            res.redirect('/idea-management')
 
         } catch (error) {
+            await session.abortTransaction();
             res.status(500).json(error)
         }
     }

@@ -5,12 +5,6 @@ const mongoose = require('mongoose')
 
 const showData = (req, res, next) => {
 
-    //? Show Department Labels
-    res.locals.departLabels = String(req.session.departLabels)
-
-    //? Show Contributors
-    res.locals.contributors = String(req.session.contributors)
-
     //? Show login name
     res.locals.userName = req.session.userName
 

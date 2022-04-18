@@ -1,4 +1,4 @@
-const {User, Role, Department, Submission, Category, Idea, Comment} = require('../models')
+const {User, Role, Department, Submission, Category, Idea, Comment, File} = require('../models')
 const _ = require('lodash')
 class RenderControllers {
 
@@ -107,9 +107,9 @@ class RenderControllers {
                 contributors.push(numberContributors)
             }
 
-            req.session.departLabels = departLabels
-            req.session.contributors = contributors
-            res.status(200).render('report/index', {layout: 'layouts/dashboard'})
+            const labels = String(departLabels)
+            const data = String(contributors)
+            res.status(200).render('report/index', {layout: 'layouts/dashboard', labels, data})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -127,11 +127,26 @@ class RenderControllers {
     }
 
     //TODO
-    // [GET] /all-ideas
+    // [GET] /all-ideas/:id
     async showAllIdeas(req, res, next) {
         try {
-            const ideas = await Idea.find()
-            res.status(200).render('forum/ideas', {layout: 'layouts/forum', ideas})
+            const limitAsNumber = parseInt(req.query.limit)
+            const pageAsNumber = parseInt(req.query.page)
+
+            let page = 1
+            if (!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
+                page = pageAsNumber;
+            }
+
+            let limit = 5
+            if (!Number.isNaN(limitAsNumber) && !(limitAsNumber > 10) && !(limitAsNumber < 1)) {
+                limit = limitAsNumber;
+            }
+
+            const submissionId = req.params.id
+            const ideas = await Idea.find({submission: submissionId}).skip((limit * page) - limit).limit(limit)
+            const count = ideas.length
+            res.status(200).render('forum/ideas', {layout: 'layouts/forum', ideas, submissionId, current: page, pages: Math.ceil(count / limit)})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -142,9 +157,10 @@ class RenderControllers {
     async showDetailIdea(req, res, next) {
         try {
             const ideaId = req.params.id
-            const idea = await Idea.findById(ideaId)
+            const idea = await Idea.findById(ideaId).populate('user')
+            const file = await File.findOne({idea: ideaId})
             const comments = await Comment.find({idea: ideaId}).populate('user')
-            res.status(200).render('forum/ideaDetail', {layout: 'layouts/forum', idea, comments})
+            res.status(200).render('forum/ideaDetail', {layout: 'layouts/forum', idea, comments, file})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }
@@ -164,7 +180,7 @@ class RenderControllers {
     // [GET] /idea-management
     async crudIdea(req, res, next) {
         try {
-            const ideas = await Idea.find()
+            const ideas = await Idea.find().populate('submission')
             res.status(200).render('idea/showList', {layout: 'layouts/forum', ideas})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
@@ -176,8 +192,10 @@ class RenderControllers {
     async updateIdea(req, res, next) {
         try {
             const ideaId = req.params.id
-            const ideas = await Idea.findById(ideaId)
-            res.status(200).render('idea/detail', {layout: 'layouts/forum'})
+            const idea = await Idea.findById(ideaId)
+            const submissions = await Submission.find()
+            const categories = await Category.find()
+            res.status(200).render('idea/detail', {layout: 'layouts/forum', idea, submissions, categories})
         } catch (error) {
             res.status(500).render('status/500', {layout: false})
         }

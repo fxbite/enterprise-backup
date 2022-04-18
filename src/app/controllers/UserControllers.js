@@ -99,8 +99,7 @@ class UserController {
             if (err) {
               res.status(400).json('Unable to log out');
             }
-            res.clearCookie('sid')
-            res.redirect('/login')
+            return res.redirect('/login')
           });
         } else {
           res.end();

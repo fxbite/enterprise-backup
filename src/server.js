@@ -18,12 +18,11 @@ app.use(
     session({
       secret: 'keyboard cat',
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
-        maxAge: 60000 //? Session expire in 1 hour
+        maxAge: 60000 * 60 //? Session expire in 1 hour
       },
       store: sessionStore, 
-      name: 'sid'
     })
   )
 

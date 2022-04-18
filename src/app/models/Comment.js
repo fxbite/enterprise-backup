@@ -6,7 +6,7 @@ const CommentSchema = new Schema({
     anonymousMode: {type: Boolean, default: false},
     idea: {type: Schema.Types.ObjectId, required: true, ref: 'Idea'},
     user: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
-    comment: {type: Schema.Types.ObjectId, default: "", ref: 'Comment'},
+    comment: {type: String, default: ""},
     replierMode: {type: Boolean, default: false}
 
 }, {timestamps: true}
