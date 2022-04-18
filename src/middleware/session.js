@@ -13,9 +13,8 @@ const requiredLogin = (req, res, next) => {
 
 const managerRole = (req, res, next) => {
   try {
-    const access = ['623ec78019af8a0d9cd33b7e', '623ec6b919af8a0d9cd33b74']
     const status = req.session.role 
-    if(access.includes(status)) {
+    if(status === 0) {
       next()
     } else {
       return res.status(403).json('Permission Denied')
@@ -27,9 +26,8 @@ const managerRole = (req, res, next) => {
 
 const coordinatorRole = async(req, res, next) => {
   try {
-    const access = ['623ec78019af8a0d9cd33b7e', '623ec63819af8a0d9cd33b6e']
     const status = req.session.role 
-    if(access.includes(status)) {
+    if(status === 0 || status === 1) {
       next()
     } else {
       return res.status(403).json('Permission Denied')

@@ -5,6 +5,9 @@ const mongoose = require('mongoose')
 
 const showData = (req, res, next) => {
 
+    //? Role
+    res.locals.role = req.session.role
+
     //? Show login name
     res.locals.userName = req.session.userName
 

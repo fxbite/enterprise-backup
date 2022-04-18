@@ -54,15 +54,15 @@ router.get('/comments', requiredLogin, commentController.showAllComment)        
 //* Submission
 //~ Server rendering
 //TODO: Add requiredLogin & managerRole 
-router.get('/submission-management', requiredLogin, renderController.crudSubmission)
-router.get('/submission-register', requiredLogin, renderController.registerSubmission)
-router.get('/submission-update/:id', requiredLogin, renderController.updateSubmission)
-router.post('/submission', requiredLogin, submissionController.createSubmission) 
+router.get('/submission-management', requiredLogin, managerRole, renderController.crudSubmission)
+router.get('/submission-register', requiredLogin, managerRole, renderController.registerSubmission)
+router.get('/submission-update/:id', requiredLogin, managerRole, renderController.updateSubmission)
+router.post('/submission', requiredLogin, managerRole, submissionController.createSubmission) 
 
 //~ For API
 router.route('/submission/:id')
-    .patch(requiredLogin, submissionController.updateSubmission)  //? Using with server rending
-    .delete(requiredLogin, submissionController.deleteSubmission) //? Using with server rending
+    .patch(requiredLogin, managerRole, submissionController.updateSubmission)  //? Using with server rending
+    .delete(requiredLogin, managerRole, submissionController.deleteSubmission) //? Using with server rending
     .get(submissionController.getASubmission)
 router.get('/submissions', submissionController.getAllSubmission)   
 
@@ -79,10 +79,10 @@ router.post('/file/:id/idea', requiredLogin, upload.single('document'), fileCont
 //* User
 //~ Server rendering 
 //TODO: Add requiredLogin
-router.get('/user-management', requiredLogin, renderController.crudUser)
-router.get('/user-register', requiredLogin, renderController.registerUser)
-router.get('/user-update/:id', requiredLogin, renderController.updateUser)
-router.post('/register', requiredLogin, registerSchema, validateRequest, userController.registerUser) 
+router.get('/user-management', requiredLogin, managerRole, renderController.crudUser)
+router.get('/user-register', requiredLogin, managerRole, renderController.registerUser)
+router.get('/user-update/:id', requiredLogin, managerRole, renderController.updateUser)
+router.post('/register', requiredLogin, registerSchema, validateRequest, managerRole, userController.registerUser) 
 router.get('/login', userController.showLogin)
 router.post('/login/auth', loginSchema, validateRequest, userController.authLogin)
 router.get('/logout', requiredLogin, userController.logout)
@@ -104,14 +104,14 @@ router.get('/react', requiredLogin, reactController.getAllReact)
 //* Category
 //~ Server rendering
 //TODO: Add requiredLogin & managerRole
-router.get('/category-management', requiredLogin, renderController.crudCategory)
-router.post('/category', requiredLogin, categoryController.categoryCreate)         //? Create a category
-router.get('/test', requiredLogin, renderController.test)
+router.get('/category-management', requiredLogin, managerRole, renderController.crudCategory)
+router.post('/category', requiredLogin, managerRole, categoryController.categoryCreate)         //? Create a category
+router.get('/test', requiredLogin, managerRole, renderController.test)
 
 //~ For API
 router.route('/category/:id')
-    .put(requiredLogin, categoryController.categoryUpdate)      //? Update a category
-    .delete(requiredLogin, categoryController.categoryDelete)   //? Delete a category if category is never used
+    .put(requiredLogin, managerRole, categoryController.categoryUpdate)      //? Update a category
+    .delete(requiredLogin, managerRole, categoryController.categoryDelete)   //? Delete a category if category is never used
     .get(categoryController.getACategory)        //? Get a category
 router.get('/categories', categoryController.getAllCategory)        //? Get all categories
 
@@ -129,20 +129,20 @@ router.get('/roles', roleController.getAllRole)         //? Get all roles
 //* Department
 //~ Server rendering
 //TODO: Add requiredLogin & coordinatorRole
-router.get('/department-management', requiredLogin, renderController.crudDepartment)
-router.post('/department', requiredLogin, departmentController.createDepart)          //? Create a department
+router.get('/department-management', requiredLogin, coordinatorRole, renderController.crudDepartment)
+router.post('/department', requiredLogin, coordinatorRole, departmentController.createDepart)          //? Create a department
 
 //~ For API
 router.route('/department/:id')
-    .put(requiredLogin, departmentController.updateDepart)       //? Update a department
-    .delete(requiredLogin, departmentController.deleteDepart)    //? Delete a department
+    .put(requiredLogin, coordinatorRole, departmentController.updateDepart)       //? Update a department
+    .delete(requiredLogin, coordinatorRole, departmentController.deleteDepart)    //? Delete a department
     .get(departmentController.getADepart)         //? Get a department
 router.get('/departments', departmentController.getAllDepart)           //? Get all departments
 
 
 //* Folder
-router.post('/folder', requiredLogin, folderController.createFolder)           //?
-router.delete('/folder/:id', requiredLogin, folderController.deleteFolder)     //? 
+router.post('/folder', requiredLogin, managerRole, folderController.createFolder)           //?
+router.delete('/folder/:id', requiredLogin, managerRole, folderController.deleteFolder)     //? 
 
 
 //* Icon
@@ -154,11 +154,11 @@ router.get('/icons', iconController.getAllIcon)        //? Get all icons
 
 
 //* Download CSV file
-router.get('/csv/download', requiredLogin, downloadController.csvDownload)  //? Download csv
+router.get('/csv/download', requiredLogin, managerRole, downloadController.csvDownload)  //? Download csv
 
 
 //* Show report chart
-router.get('/report', requiredLogin, renderController.chartData) 
+router.get('/report', requiredLogin, managerRole, renderController.chartData) 
 
 
 module.exports = router

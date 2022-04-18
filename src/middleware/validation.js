@@ -8,7 +8,7 @@ const registerSchema = [
         .isEmpty()
         .withMessage('Username is required')
         .bail()
-        .isLength({max: 10})
+        .isLength({max: 20})
         .withMessage('Username in 10 characters')
         .bail()
         .custom(async(value) => {
@@ -86,7 +86,7 @@ const loginSchema = [
         .isEmpty()
         .withMessage('Username is required')
         .bail()
-        .isLength({max: 10})
+        .isLength({max: 20})
         .withMessage('Username in 10 characters'),
     body('password')
         .not()
